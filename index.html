@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistem Gerak Manusia - Belajar Interaktif</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brandA: #7c3aed; /* violet-600 */
+    --brandB: #06b6d4; /* cyan-500 */
+    --ink: #0b1020;
+  }
+  html,body { height:100%; }
+  body { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif; }
+  /* Fancy glow dots */
+  .glow::before, .glow::after {
+    content:"";
+    position:absolute;
+    inset:auto;
+    width:18rem; height:18rem;
+    filter: blur(70px);
+    opacity:.35; z-index:0;
+    border-radius:999px;
+  }
+  .glow::before { background: radial-gradient(closest-side, var(--brandA), transparent 70%); top:-3rem; left:-3rem; }
+  .glow::after { background: radial-gradient(closest-side, var(--brandB), transparent 70%); bottom:-3rem; right:-3rem; }
+  /* Simple SVG highlight transitions */
+  .svg-part { transition: all .35s ease; }
+  .pulse {
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: .9; }
+    50% { transform: scale(1.04); opacity: 1; }
+  }
+  /* Flip card */
+  .flip {
+    perspective: 1000px;
+  }
+  .flip-inner {
+    transition: transform .6s;
+    transform-style: preserve-3d;
+  }
+  .flip.flip-active .flip-inner {
+    transform: rotateY(180deg);
+  }
+  .flip-face {
+    backface-visibility: hidden;
+  }
+  .flip-back {
+    transform: rotateY(180deg);
+  }
+  /* Button micro-interaction */
+  .btn {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .btn::after {
+    content:"";
+    position:absolute; inset:0;
+    background: radial-gradient(120px 120px at var(--x,50%) var(--y,50%), rgba(255,255,255,.25), transparent 60%);
+    opacity:0; transition: opacity .25s;
+    pointer-events:none; z-index:0;
+  }
+  .btn:hover::after { opacity:1; }
+</style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-900 via-slate-900 to-cyan-900 text-white selection:bg-cyan-400 selection:text-slate-900">
+
+  <!-- Header -->
+  <header class="relative glow">
+    <div class="mx-auto max-w-7xl px-4 pt-10 pb-6">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div>
+          <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">
+            Sistem Gerak Manusia
+          </h1>
+          <p class="text-cyan-200/90 mt-2 max-w-2xl">
+            Pelajari rangka, otot, dan sendi lewat simulasi interaktif, kartu ringkas, dan kuis cepat.
+          </p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="btnReset" class="btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white">
+            Reset Halaman
+          </button>
+          <button id="btnHelp" class="btn px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">
+            Cara Pakai
+          </button>
+        </div>
+      </div>
+      <div class="mt-6 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"></div>
+      <div id="helper" class="mt-4 hidden">
+        <div class="rounded-2xl bg-white/10 border border-white/15 p-4 text-sm text-cyan-100">
+          • Gunakan tab di bawah untuk berpindah topik. • Klik area tubuh untuk menyorot rangka Aksial/Apendikular.
+          • Coba tombol "Fleksi" dan "Ekstensi" untuk melihat kerja otot. • Kerjakan kuis di akhir!
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-7xl px-4 pb-24">
+    <!-- Tabs -->
+    <nav class="sticky top-2 z-20 mt-4">
+      <div class="rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-2 flex flex-wrap gap-2">
+        <button data-tab="rangka" class="tab btn px-4 py-2 rounded-xl bg-violet-600 text-white font-semibold">Rangka</button>
+        <button data-tab="otot" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Otot</button>
+        <button data-tab="sendi" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Sendi</button>
+        <button data-tab="lainnya" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Sistem Lainnya</button>
+        <button data-tab="sehat" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Pola Hidup Sehat</button>
+        <button data-tab="kuis" class="tab btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-900 font-semibold">Kuis</button>
+      </div>
+    </nav>
+
+    <!-- Content Panels -->
+    <section id="panel-rangka" class="panel mt-8 grid lg:grid-cols-2 gap-8">
+      <!-- SVG Body -->
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5 relative overflow-hidden">
+        <h2 class="text-xl font-bold mb-3">🦴 Rangka Tubuh Manusia</h2>
+        <p class="text-cyan-100/80 text-sm mb-4">Klik tombol untuk menyorot kelompok tulang. Arahkan kursor ke bagian untuk melihat nama.</p>
+        <div class="flex gap-3 mb-4 flex-wrap">
+          <button id="btnAxial" class="btn px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 font-semibold">Sorot Aksial</button>
+          <button id="btnAppend" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Sorot Apendikular</button>
+          <button id="btnClear" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Bersihkan</button>
+        </div>
+
+        <div class="relative mx-auto max-w-sm">
+          <!-- Simple stylized SVG figure -->
+          <svg id="svgBody" viewBox="0 0 300 600" class="w-full drop-shadow-lg">
+            <!-- Torso outline -->
+            <g fill="none" stroke="#a5b4fc" stroke-width="2" opacity="0.6">
+              <path d="M150 70 C130 70 110 85 110 110 L110 200 C110 220 120 240 150 240 C180 240 190 220 190 200 L190 110 C190 85 170 70 150 70 Z" />
+              <!-- Arms -->
+              <path d="M110 130 L70 200 L80 210 L115 150" />
+              <path d="M190 130 L230 200 L220 210 L185 150" />
+              <!-- Pelvis -->
+              <path d="M130 240 L170 240 L185 280 L115 280 Z" />
+              <!-- Legs outline -->
+              <path d="M130 280 L120 430 L125 560" />
+              <path d="M170 280 L180 430 L175 560" />
+            </g>
+
+            <!-- AXIAL skeleton -->
+            <!-- Skull -->
+            <g id="ax-skull" class="svg-part" data-label="Tengkorak (Aksial)" fill="#a78bfa" fill-opacity="0.12" stroke="#a78bfa" stroke-width="2">
+              <circle cx="150" cy="45" r="28"></circle>
+            </g>
+            <!-- Spine -->
+            <g id="ax-spine" class="svg-part" data-label="Tulang Belakang (Aksial)">
+              <path d="M150 75 L150 230" stroke="#a78bfa" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+              <!-- small vertebrae ticks -->
+              <g stroke="#a78bfa" stroke-width="2" opacity="0.7">
+                <line x1="142" y1="95" x2="158" y2="95"/>
+                <line x1="142" y1="115" x2="158" y2="115"/>
+                <line x1="142" y1="135" x2="158" y2="135"/>
+                <line x1="142" y1="155" x2="158" y2="155"/>
+                <line x1="142" y1="175" x2="158" y2="175"/>
+                <line x1="142" y1="195" x2="158" y2="195"/>
+              </g>
+            </g>
+            <!-- Rib cage -->
+            <g id="ax-ribs" class="svg-part" data-label="Tulang Dada & Rusuk (Aksial)" stroke="#a78bfa" fill="none" opacity="0.9">
+              <ellipse cx="150" cy="150" rx="30" ry="40" stroke-width="3"/>
+              <g opacity="0.9">
+                <path d="M150 120 C120 120 110 140 110 150" />
+                <path d="M150 130 C118 130 108 150 108 160" />
+                <path d="M150 140 C116 140 106 160 106 170" />
+                <path d="M150 150 C120 150 110 170 110 180" />
+                <path d="M150 120 C180 120 190 140 190 150" />
+                <path d="M150 130 C182 130 192 150 192 160" />
+                <path d="M150 140 C184 140 194 160 194 170" />
+                <path d="M150 150 C180 150 190 170 190 180" />
+              </g>
+            </g>
+
+            <!-- APPENDICULAR -->
+            <!-- Arms (humerus, radius, ulna) -->
+            <g id="ap-upper" class="svg-part" data-label="Anggota Gerak Atas (Apendikular)" opacity="0.95">
+              <line x1="115" y1="150" x2="95"  y2="210" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+              <line x1="95"  y1="210" x2="85"  y2="260" stroke="#22d3ee" stroke-width="6" stroke-linecap="round"/>
+              <line x1="185" y1="150" x2="205" y2="210" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+              <line x1="205" y1="210" x2="215" y2="260" stroke="#22d3ee" stroke-width="6" stroke-linecap="round"/>
+            </g>
+            <!-- Hands -->
+            <g id="ap-hand" class="svg-part" data-label="Pergelangan & Telapak Tangan (Apendikular)">
+              <circle cx="82" cy="270" r="10" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee" />
+              <circle cx="218" cy="270" r="10" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee" />
+            </g>
+            <!-- Pelvic girdle hint (counts appendicular) -->
+            <g id="ap-pelvic" class="svg-part" data-label="Gelang Panggul (Apendikular)">
+              <path d="M125 240 C150 270 150 270 175 240" fill="none" stroke="#22d3ee" stroke-width="6" stroke-linecap="round" opacity="0.9"/>
+            </g>
+            <!-- Legs -->
+            <g id="ap-lower" class="svg-part" data-label="Anggota Gerak Bawah (Apendikular)" opacity="0.95">
+              <line x1="140" y1="285" x2="135" y2="410" stroke="#22d3ee" stroke-width="10" stroke-linecap="round"/>
+              <line x1="160" y1="285" x2="165" y2="410" stroke="#22d3ee" stroke-width="10" stroke-linecap="round"/>
+              <line x1="135" y1="410" x2="132" y2="540" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+              <line x1="165" y1="410" x2="168" y2="540" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+            </g>
+            <!-- Feet -->
+            <g id="ap-feet" class="svg-part" data-label="Pergelangan & Telapak Kaki (Apendikular)">
+              <ellipse cx="128" cy="552" rx="16" ry="6" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee"/>
+              <ellipse cx="172" cy="552" rx="16" ry="6" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee"/>
+            </g>
+          </svg>
+
+          <!-- Tooltip -->
+          <div id="tip" class="hidden absolute -translate-x-1/2 -translate-y-full px-2.5 py-1 rounded-md bg-slate-900/90 border border-white/10 text-xs pointer-events-none"></div>
+        </div>
+      </div>
+
+      <!-- Cards -->
+      <div class="space-y-5">
+        <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+          <h3 class="font-bold text-lg mb-2">Ikhtisar</h3>
+          <p class="text-cyan-100/85">Sistem gerak terdiri dari <span class="font-semibold">tulang (pasif)</span> dan <span class="font-semibold">otot (aktif)</span> yang bekerja sama menghasilkan gerakan.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-5">
+          <!-- Axial -->
+          <div class="flip rounded-2xl bg-white/5 border border-white/10 p-0 cursor-pointer">
+            <div class="flip-inner p-5">
+              <div class="flip-face">
+                <h4 class="font-semibold mb-1">Rangka Aksial</h4>
+                <p class="text-sm text-cyan-100/80">Tulang sumbu: tengkorak, tulang belakang, dada & rusuk. Melindungi organ vital.</p>
+              </div>
+              <div class="flip-face flip-back absolute inset-0 rounded-2xl p-5 bg-violet-600/20 border border-violet-400/30">
+                <p class="text-sm">Fungsi utama: <span class="font-semibold">perlindungan</span> dan <span class="font-semibold">penegak tubuh</span>.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Appendicular -->
+          <div class="flip rounded-2xl bg-white/5 border border-white/10 p-0 cursor-pointer">
+            <div class="flip-inner p-5">
+              <div class="flip-face">
+                <h4 class="font-semibold mb-1">Rangka Apendikular</h4>
+                <p class="text-sm text-cyan-100/80">Anggota gerak atas & bawah, berperan besar dalam pergerakan.</p>
+              </div>
+              <div class="flip-face flip-back absolute inset-0 rounded-2xl p-5 bg-cyan-500/20 border border-cyan-400/30">
+                <p class="text-sm">Contoh: lengan, hasta, pengumpil, pergelangan & telapak; paha, betis, pergelangan & telapak kaki.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- List detail -->
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5">
+          <h4 class="font-semibold mb-3">Rincian Cepat</h4>
+          <div class="grid sm:grid-cols-2 gap-4 text-sm">
+            <div class="space-y-2">
+              <p class="text-cyan-200 font-semibold">Aksial</p>
+              <ul class="list-disc ml-6 text-cyan-100/85">
+                <li>Tengkorak</li>
+                <li>Tulang belakang</li>
+                <li>Dada & rusuk</li>
+              </ul>
+            </div>
+            <div class="space-y-2">
+              <p class="text-cyan-200 font-semibold">Apendikular</p>
+              <ul class="list-disc ml-6 text-cyan-100/85">
+                <li>Anggota gerak atas</li>
+                <li>Anggota gerak bawah</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Otot -->
+    <section id="panel-otot" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <h2 class="text-xl font-bold mb-3">💪 Jenis Otot</h2>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="font-semibold">Otot Polos</p>
+            <p class="text-sm text-cyan-100/85">Tidak sadar; di organ pencernaan.</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="font-semibold">Otot Lurik</p>
+            <p class="text-sm text-cyan-100/85">Sadar; menempel pada rangka.</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="font-semibold">Otot Jantung</p>
+            <p class="text-sm text-cyan-100/85">Tidak sadar; hanya di jantung.</p>
+          </div>
+        </div>
+        <div class="mt-5 rounded-xl bg-gradient-to-br from-violet-600/20 to-cyan-500/10 border border-white/10 p-4">
+          <p class="text-sm">
+            Cara kerja: otot bekerja <span class="font-semibold">antagonis</span> (berlawanan). Saat bisep berkontraksi (memendek), trisep relaksasi (memanjang), lengan menekuk. Kebalikannya saat meluruskan.
+          </p>
+        </div>
+      </div>
+
+      <!-- Arm simulator -->
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <h3 class="font-bold mb-3">Simulasi Antagonis: Bisep vs Trisep</h3>
+        <div class="flex items-center gap-3 mb-3">
+          <button id="btnFlex" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-900 font-semibold hover:bg-cyan-400">Fleksi (Tekuk)</button>
+          <button id="btnExtend" class="btn px-3 py-1.5 rounded-lg bg-violet-600 font-semibold hover:bg-violet-500">Ekstensi (Luruskan)</button>
+          <button id="btnArmReset" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Ulang</button>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-4 items-center">
+          <div class="sm:col-span-2">
+            <svg id="armSvg" viewBox="0 0 420 220" class="w-full">
+              <!-- Shoulder -->
+              <circle cx="60" cy="110" r="16" fill="#a78bfa" class="pulse"/>
+              <!-- Upper arm (humerus) -->
+              <rect id="upperArm" x="75" y="95" width="110" height="30" rx="14" fill="#94a3b8" />
+              <!-- Elbow pivot -->
+              <circle id="elbow" cx="190" cy="110" r="10" fill="#22d3ee"/>
+              <!-- Forearm (radius/ulna) - rotates around elbow -->
+              <g id="foreGroup" transform="rotate(0,190,110)">
+                <rect x="190" y="100" width="110" height="20" rx="10" fill="#94a3b8"/>
+                <!-- Hand -->
+                <rect x="300" y="92" width="30" height="36" rx="8" fill="#22d3ee" fill-opacity="0.6"/>
+              </g>
+              <!-- Biceps -->
+              <ellipse id="biceps" cx="130" cy="82" rx="38" ry="18" fill="#22d3ee" fill-opacity="0.35" class="svg-part" />
+              <!-- Triceps -->
+              <ellipse id="triceps" cx="130" cy="142" rx="38" ry="18" fill="#a78bfa" fill-opacity="0.35" class="svg-part" />
+            </svg>
+          </div>
+          <div class="sm:col-span-1 space-y-3">
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3">
+              <p class="text-sm">Bisep: <span id="lblBiceps" class="font-semibold text-cyan-300">Relaksasi</span></p>
+              <div class="mt-2 h-2 rounded bg-white/10">
+                <div id="barBiceps" class="h-2 rounded bg-cyan-400" style="width:35%"></div>
+              </div>
+            </div>
+            <div class="rounded-xl bg-white/5 border border-white/10 p-3">
+              <p class="text-sm">Trisep: <span id="lblTriceps" class="font-semibold text-violet-300">Relaksasi</span></p>
+              <div class="mt-2 h-2 rounded bg-white/10">
+                <div id="barTriceps" class="h-2 rounded bg-violet-400" style="width:35%"></div>
+              </div>
+            </div>
+            <div class="text-xs text-cyan-100/80">Tip: Fleksi = bisep kontraksi, trisep relaksasi. Ekstensi kebalikannya.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sendi -->
+    <section id="panel-sendi" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <h2 class="text-xl font-bold mb-3">🦵 Jenis Sendi</h2>
+        <div class="grid sm:grid-cols-3 gap-4 text-sm">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="font-semibold">Mati</p>
+            <p class="text-cyan-100/85">Tengkorak (sinartrosis)</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="font-semibold">Kaku</p>
+            <p class="text-cyan-100/85">Rusuk–dada (amfiartrosis)</p>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+            <p class="font-semibold">Gerak bebas</p>
+            <p class="text-cyan-100/85">Diartrosis</p>
+          </div>
+        </div>
+
+        <div class="mt-5 flex gap-2 flex-wrap">
+          <button data-demo="engsel" class="btn demo px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Engsel</button>
+          <button data-demo="peluru" class="btn demo px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Peluru</button>
+          <button data-demo="pelana" class="btn demo px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Pelana</button>
+          <button data-demo="putar" class="btn demo px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Putar</button>
+          <button data-demo="geser" class="btn demo px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Geser</button>
+        </div>
+      </div>
+
+      <!-- Joint demos -->
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <h3 class="font-bold mb-3">Demo Gerak Sendi</h3>
+        <div class="rounded-xl bg-slate-900/40 border border-white/10 p-4">
+          <svg id="jointSvg" viewBox="0 0 420 200" class="w-full">
+            <!-- Base -->
+            <rect x="24" y="170" width="372" height="8" rx="4" fill="#0ea5e9" opacity="0.35"/>
+            <!-- Demo zone -->
+            <g id="demoArea"></g>
+          </svg>
+          <div class="text-xs text-cyan-100/85 mt-2" id="jointNote">Pilih jenis sendi untuk melihat gerakannya.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sistem Lainnya -->
+    <section id="panel-lainnya" class="panel hidden mt-8 grid lg:grid-cols-3 gap-8">
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <h2 class="text-xl font-bold mb-3">🧬 Sistem Reproduksi</h2>
+        <p class="text-sm text-cyan-100/85">Berfungsi menghasilkan keturunan. Organ utama: <span class="font-semibold">testis</span> (laki-laki) & <span class="font-semibold">ovarium</span> (perempuan).</p>
+      </div>
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <h2 class="text-xl font-bold mb-3">🧠 Sistem Saraf</h2>
+        <p class="text-sm text-cyan-100/85">Pusat pengendali & komunikasi. Otak, sumsum tulang belakang, dan saraf menerima, mengolah, dan mengirim informasi.</p>
+      </div>
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <h2 class="text-xl font-bold mb-3">⚖️ Sistem Hormon</h2>
+        <p class="text-sm text-cyan-100/85">Menghasilkan hormon untuk pertumbuhan, metabolisme, dan suasana hati. Bekerja sama dengan sistem saraf.</p>
+      </div>
+    </section>
+
+    <!-- Pola Hidup Sehat -->
+    <section id="panel-sehat" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <h2 class="text-xl font-bold mb-3">🏃 Kebiasaan Sehat Harian</h2>
+        <form id="habitForm" class="grid sm:grid-cols-2 gap-4">
+          <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer">
+            <input type="checkbox" name="habit" value="makan" class="mt-1">
+            <span>
+              <span class="font-semibold">Makanan Sehat & Bergizi</span>
+              <span class="block text-sm text-cyan-100/85">Sayur, buah, protein, karbo seimbang.</span>
+            </span>
+          </label>
+          <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer">
+            <input type="checkbox" name="habit" value="olahraga" class="mt-1">
+            <span>
+              <span class="font-semibold">Olahraga Teratur</span>
+              <span class="block text-sm text-cyan-100/85">Perkuat otot & tulang.</span>
+            </span>
+          </label>
+          <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer">
+            <input type="checkbox" name="habit" value="istirahat" class="mt-1">
+            <span>
+              <span class="font-semibold">Istirahat Cukup</span>
+              <span class="block text-sm text-cyan-100/85">Tidur cukup untuk pemulihan.</span>
+            </span>
+          </label>
+          <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer">
+            <input type="checkbox" name="habit" value="air" class="mt-1">
+            <span>
+              <span class="font-semibold">Minum Air Putih</span>
+              <span class="block text-sm text-cyan-100/85">Tetap terhidrasi.</span>
+            </span>
+          </label>
+          <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer sm:col-span-2">
+            <input type="checkbox" name="habit" value="bersih" class="mt-1">
+            <span>
+              <span class="font-semibold">Kebersihan Diri</span>
+              <span class="block text-sm text-cyan-100/85">Mandi, cuci tangan, lingkungan bersih.</span>
+            </span>
+          </label>
+          <div class="sm:col-span-2 flex items-center gap-3">
+            <button class="btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-900 font-semibold hover:bg-cyan-400" id="saveHabit">Simpan</button>
+            <button class="btn px-4 py-2 rounded-xl bg-white/10 border border-white/10 hover:bg-white/15" id="resetHabit">Reset</button>
+            <div class="text-sm text-cyan-100/85" id="habitMsg"></div>
+          </div>
+        </form>
+
+        <div class="mt-5">
+          <p class="text-sm mb-2">Progres kebiasaan hari ini</p>
+          <div class="h-3 rounded-full bg-white/10 overflow-hidden">
+            <div id="habitBar" class="h-3 bg-gradient-to-r from-cyan-400 to-violet-500 rounded-full transition-all" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <h3 class="font-bold mb-3">🔵 Pelacak Air Minum</h3>
+        <div class="flex items-center gap-3">
+          <button id="waterMinus" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">- 1</button>
+          <div class="text-3xl font-extrabold"><span id="waterCount">0</span> gelas</div>
+          <button id="waterPlus" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-900 font-semibold hover:bg-cyan-400">+ 1</button>
+        </div>
+        <div class="mt-3 text-sm text-cyan-100/85" id="waterNote">Target sehat: 6–8 gelas/hari.</div>
+        <div class="mt-3 h-2 rounded bg-white/10">
+          <div id="waterBar" class="h-2 bg-cyan-400 rounded transition-all" style="width:0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kuis -->
+    <section id="panel-kuis" class="panel hidden mt-8">
+      <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
+          <h2 class="text-xl font-bold">🎯 Kuis Cepat</h2>
+          <div class="flex items-center gap-3">
+            <div class="text-sm">Skor: <span id="score" class="font-semibold">0</span>/<span id="totalQ">0</span></div>
+            <button id="restartQuiz" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Mulai Ulang</button>
+          </div>
+        </div>
+        <div class="mt-4 h-2 rounded bg-white/10">
+          <div id="quizBar" class="h-2 bg-gradient-to-r from-cyan-400 to-violet-500 rounded transition-all" style="width:0%"></div>
+        </div>
+
+        <form id="quizForm" class="mt-6 space-y-6"></form>
+
+        <div id="quizActions" class="mt-6 flex items-center gap-3">
+          <button id="submitQuiz" class="btn px-4 py-2 rounded-xl bg-cyan-500 text-slate-900 font-semibold hover:bg-cyan-400">Periksa Jawaban</button>
+          <button id="showExplain" class="btn px-4 py-2 rounded-xl bg-white/10 border border-white/10 hover:bg-white/15">Lihat Pembahasan</button>
+          <div id="quizMsg" class="text-sm text-cyan-100/85"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<script>
+  // Small helpers
+  const $ = (q, root=document) => root.querySelector(q);
+  const $$ = (q, root=document) => Array.from(root.querySelectorAll(q));
+  const setBtnRipple = (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--x', (e.clientX - r.left) + 'px');
+    e.currentTarget.style.setProperty('--y', (e.clientY - r.top) + 'px');
+  };
+  $$('.btn').forEach(b=> b.addEventListener('pointermove', setBtnRipple));
+
+  // Tabs
+  const tabs = $$('.tab');
+  const panels = $$('.panel');
+  function showTab(name){
+    panels.forEach(p => p.id === 'panel-'+name ? p.classList.remove('hidden') : p.classList.add('hidden'));
+    tabs.forEach(t => {
+      if(t.dataset.tab === name){
+        t.classList.add('bg-violet-600','text-white','font-semibold');
+        t.classList.remove('hover:bg-white/10','border','border-white/10','bg-cyan-500','text-slate-900');
+      } else {
+        t.classList.remove('bg-violet-600','bg-cyan-500','text-slate-900','font-semibold');
+        t.classList.add('hover:bg-white/10','border','border-white/10');
+      }
+    });
+    // default highlight per tab
+    if(name==='rangka'){ clearHighlights(); }
+  }
+  tabs.forEach(t => t.addEventListener('click', ()=> showTab(t.dataset.tab)));
+  // Default open
+  showTab('rangka');
+
+  // Header controls
+  $('#btnHelp').addEventListener('click', (e)=> {
+    e.preventDefault();
+    $('#helper').classList.toggle('hidden');
+  });
+  $('#btnReset').addEventListener('click', (e)=>{
+    e.preventDefault();
+    // Reset UI states
+    showTab('rangka');
+    clearHighlights();
+    armExtend();
+    resetHabits();
+    resetWater();
+    restartQuiz();
+    $('#helper').classList.add('hidden');
+  });
+
+  // Flip cards
+  $$('.flip').forEach(card => {
+    card.addEventListener('click', ()=> card.classList.toggle('flip-active'));
+  });
+
+  // Tooltip for SVG parts
+  const tip = $('#tip');
+  function showTip(text, x, y) {
+    tip.textContent = text;
+    tip.style.left = x + 'px';
+    tip.style.top = y - 12 + 'px';
+    tip.classList.remove('hidden');
+  }
+  function hideTip(){ tip.classList.add('hidden'); }
+
+  $$('#svgBody .svg-part').forEach(p=>{
+    p.addEventListener('mousemove', (e)=>{
+      const label = p.dataset.label || 'Bagian';
+      const host = $('#svgBody').getBoundingClientRect();
+      showTip(label, e.clientX - host.left, e.clientY - host.top);
+    });
+    p.addEventListener('mouseleave', hideTip);
+  });
+
+  // Highlight Axial vs Appendicular
+  const axialIds = ['ax-skull','ax-spine','ax-ribs'];
+  const appendIds = ['ap-upper','ap-hand','ap-pelvic','ap-lower','ap-feet'];
+
+  function setGroupOpacity(ids, val){
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if(el){ el.style.opacity = val; }
+    });
+  }
+  function clearHighlights(){
+    setGroupOpacity(axialIds, 1);
+    setGroupOpacity(appendIds, 1);
+  }
+  $('#btnAxial').addEventListener('click', ()=>{
+    setGroupOpacity(axialIds, 1);
+    setGroupOpacity(appendIds, 0.15);
+  });
+  $('#btnAppend').addEventListener('click', ()=>{
+    setGroupOpacity(axialIds, 0.15);
+    setGroupOpacity(appendIds, 1);
+  });
+  $('#btnClear').addEventListener('click', clearHighlights);
+
+  // Otot Simulator: arm
+  const fore = $('#foreGroup');
+  const biceps = $('#biceps');
+  const triceps = $('#triceps');
+  const lblBi = $('#lblBiceps');
+  const lblTr = $('#lblTriceps');
+  const barBi = $('#barBiceps');
+  const barTr = $('#barTriceps');
+
+  function armFlex(){
+    fore.setAttribute('transform','rotate(-60,190,110)');
+    biceps.setAttribute('rx','46'); biceps.setAttribute('ry','20'); // bigger = contract visual
+    triceps.setAttribute('rx','30'); triceps.setAttribute('ry','16'); // smaller = relax
+    lblBi.textContent = 'Kontraksi';
+    lblTr.textContent = 'Relaksasi';
+    barBi.style.width = '85%';
+    barTr.style.width = '25%';
+  }
+  function armExtend(){
+    fore.setAttribute('transform','rotate(0,190,110)');
+    biceps.setAttribute('rx','30'); biceps.setAttribute('ry','16');
+    triceps.setAttribute('rx','46'); triceps.setAttribute('ry','20');
+    lblBi.textContent = 'Relaksasi';
+    lblTr.textContent = 'Kontraksi';
+    barBi.style.width = '30%';
+    barTr.style.width = '80%';
+  }
+  $('#btnFlex').addEventListener('click', (e)=>{ e.preventDefault(); armFlex(); });
+  $('#btnExtend').addEventListener('click', (e)=>{ e.preventDefault(); armExtend(); });
+  $('#btnArmReset').addEventListener('click', (e)=>{ e.preventDefault(); armExtend(); });
+
+  // Sendi demos
+  const demoArea = $('#demoArea');
+  const jointNote = $('#jointNote');
+
+  function drawHinge(){ // engsel
+    demoArea.innerHTML = '';
+    const base = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    base.setAttribute('cx','210'); base.setAttribute('cy','120'); base.setAttribute('r','12');
+    base.setAttribute('fill','#22d3ee');
+    const bar = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bar.setAttribute('x','110'); bar.setAttribute('y','112'); bar.setAttribute('width','100'); bar.setAttribute('height','16');
+    bar.setAttribute('rx','8'); bar.setAttribute('fill','#94a3b8');
+    const fore = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    fore.setAttribute('id','hingeFore');
+    fore.setAttribute('x','210'); fore.setAttribute('y','114'); fore.setAttribute('width','120'); fore.setAttribute('height','12');
+    fore.setAttribute('rx','6'); fore.setAttribute('fill','#94a3b8');
+    demoArea.append(bar, base, fore);
+    let angle = -60; let dir = 1;
+    function tick(){
+      if(angle > 0) dir = -1;
+      if(angle < -60) dir = 1;
+      angle += dir*2.5;
+      fore.setAttribute('transform',`rotate(${angle},210,120)`);
+      requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Engsel: gerak satu arah (contoh: siku, lutut).';
+  }
+
+  function drawBall(){ // peluru
+    demoArea.innerHTML = '';
+    const socket = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    socket.setAttribute('cx','180'); socket.setAttribute('cy','110'); socket.setAttribute('rx','24'); socket.setAttribute('ry','18');
+    socket.setAttribute('fill','rgba(167,139,250,.35)');
+    const ball = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    ball.setAttribute('cx','180'); ball.setAttribute('cy','110'); ball.setAttribute('r','12'); ball.setAttribute('fill','#a78bfa');
+    const limb = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    limb.setAttribute('id','ballLimb');
+    limb.setAttribute('x','180'); limb.setAttribute('y','104'); limb.setAttribute('width','140'); limb.setAttribute('height','12');
+    limb.setAttribute('rx','6'); limb.setAttribute('fill','#94a3b8');
+    demoArea.append(socket, ball, limb);
+    let a = 0, r = 35;
+    function tick(){
+      a += 0.03;
+      const x = Math.cos(a)*r, y = Math.sin(a)*r;
+      limb.setAttribute('transform',`translate(${x},${y}) rotate(${a*57.3},180,110)`);
+      requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Peluru: gerak ke segala arah (contoh: bahu, panggul).';
+  }
+
+  function drawSaddle(){ // pelana
+    demoArea.innerHTML = '';
+    const base = document.createElementNS('http://www.w3.org/2000/svg','path');
+    base.setAttribute('d','M140,120 C160,95 200,145 220,120');
+    base.setAttribute('stroke','#22d3ee'); base.setAttribute('fill','none'); base.setAttribute('stroke-width','6');
+    const part = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    part.setAttribute('id','saddlePart');
+    part.setAttribute('x','200'); part.setAttribute('y','90'); part.setAttribute('width','120'); part.setAttribute('height','16'); part.setAttribute('rx','8');
+    part.setAttribute('fill','#94a3b8');
+    demoArea.append(base, part);
+    let t=0;
+    function tick(){
+      t+=0.03;
+      const tx = Math.sin(t)*25;
+      const ry = Math.cos(t)*12;
+      part.setAttribute('transform',`translate(${tx},${ry})`);
+      requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Pelana: gerak dua arah (contoh: pangkal ibu jari).';
+  }
+
+  function drawPivot(){ // putar
+    demoArea.innerHTML = '';
+    const axis = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    axis.setAttribute('x','200'); axis.setAttribute('y','70'); axis.setAttribute('width','10'); axis.setAttribute('height','90'); axis.setAttribute('rx','5');
+    axis.setAttribute('fill','#a78bfa');
+    const ring = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    ring.setAttribute('cx','205'); ring.setAttribute('cy','115'); ring.setAttribute('r','40'); ring.setAttribute('fill','none'); ring.setAttribute('stroke','#a78bfa'); ring.setAttribute('stroke-width','4'); ring.setAttribute('opacity','0.5');
+    const pointer = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    pointer.setAttribute('id','pivotPointer');
+    pointer.setAttribute('x','205'); pointer.setAttribute('y','115'); pointer.setAttribute('width','90'); pointer.setAttribute('height','8'); pointer.setAttribute('rx','4'); pointer.setAttribute('fill','#94a3b8');
+    demoArea.append(axis, ring, pointer);
+    let ang=0;
+    function tick(){
+      ang += 2.2;
+      pointer.setAttribute('transform',`rotate(${ang},205,115)`);
+      requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Putar: gerak memutar (contoh: tulang atlas-axis di leher).';
+  }
+
+  function drawGliding(){ // geser
+    demoArea.innerHTML = '';
+    const surface = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    surface.setAttribute('x','120'); surface.setAttribute('y','120'); surface.setAttribute('width','200'); surface.setAttribute('height','12'); surface.setAttribute('rx','6');
+    surface.setAttribute('fill','rgba(34,211,238,.25)');
+    const block = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    block.setAttribute('id','glideBlock');
+    block.setAttribute('x','140'); block.setAttribute('y','106'); block.setAttribute('width','60'); block.setAttribute('height','24'); block.setAttribute('rx','8');
+    block.setAttribute('fill','#94a3b8');
+    demoArea.append(surface, block);
+    let x=140, dir=1;
+    function tick(){
+      if(x>240) dir=-1;
+      if(x<120) dir=1;
+      x += dir*1.5;
+      block.setAttribute('x', x);
+      requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Geser: gerak menggeser (contoh: pergelangan tangan/kaki).';
+  }
+
+  $$('.demo').forEach(b=>{
+    b.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const t = b.dataset.demo;
+      if(t==='engsel') drawHinge();
+      if(t==='peluru') drawBall();
+      if(t==='pelana') drawSaddle();
+      if(t==='putar') drawPivot();
+      if(t==='geser') drawGliding();
+    });
+  });
+
+  // Pola Hidup Sehat
+  const habitForm = $('#habitForm');
+  const habitBar = $('#habitBar');
+  const habitMsg = $('#habitMsg');
+  function updateHabitProgress(){
+    const all = $$('input[name="habit"]', habitForm).length;
+    const done = $$('input[name="habit"]:checked', habitForm).length;
+    const pct = Math.round((done/all)*100);
+    habitBar.style.width = pct+'%';
+    habitMsg.textContent = done===all ? 'Mantap! Semua kebiasaan tercapai.' : `Progres: ${done}/${all}`;
+  }
+  habitForm.addEventListener('change', updateHabitProgress);
+  $('#saveHabit').addEventListener('click', (e)=>{
+    e.preventDefault();
+    updateHabitProgress();
+    habitMsg.textContent += ' • Tersimpan sementara.';
+  });
+  function resetHabits(){
+    $$('input[name="habit"]', habitForm).forEach(i=> i.checked=false);
+    updateHabitProgress();
+  }
+  $('#resetHabit').addEventListener('click', (e)=>{ e.preventDefault(); resetHabits(); });
+  updateHabitProgress();
+
+  // Water tracker
+  const waterCountEl = $('#waterCount');
+  const waterBar = $('#waterBar');
+  let water = 0;
+  function renderWater(){
+    waterCountEl.textContent = water;
+    let pct = Math.min(100, Math.round(water/8*100));
+    waterBar.style.width = pct + '%';
+    $('#waterNote').textContent = water < 6 ? 'Ayo tambah lagi hingga minimal 6 gelas.' : 'Bagus! Tetap seimbang sepanjang hari.';
+  }
+  function resetWater(){ water=0; renderWater(); }
+  $('#waterPlus').addEventListener('click', (e)=>{ e.preventDefault(); water = Math.min(12, water+1); renderWater(); });
+  $('#waterMinus').addEventListener('click', (e)=>{ e.preventDefault(); water = Math.max(0, water-1); renderWater(); });
+  renderWater();
+
+  // Kuis
+  const questions = [
+    { id:1, q:'Bagian rangka yang melindungi otak termasuk...', opts:['Apendikular','Aksial','Pelana'], a:1, exp:'Tengkorak adalah bagian rangka aksial.' },
+    { id:2, q:'Otot yang bekerja di bawah kesadaran adalah...', opts:['Otot lurik','Otot polos','Otot jantung'], a:0, exp:'Otot lurik (rangka) digerakkan secara sadar.' },
+    { id:3, q:'Contoh sendi engsel terdapat pada...', opts:['Bahu','Leher','Siku'], a:2, exp:'Siku dan lutut adalah sendi engsel.' },
+    { id:4, q:'Saat fleksi lengan, yang berkontraksi adalah...', opts:['Trisep','Bisep','Keduanya'], a:1, exp:'Fleksi: bisep kontraksi, trisep relaksasi.' },
+    { id:5, q:'Anggota gerak bawah termasuk...', opts:['Tulang paha & betis','Tengkorak & rusuk','Humerus & radius'], a:0, exp:'Paha, tulang kering (tibia), betis (fibula), pergelangan & telapak kaki.' },
+    { id:6, q:'Sendi peluru memungkinkan...', opts:['Satu arah','Dua arah','Segala arah'], a:2, exp:'Sendi peluru (bahu/panggul) bergerak multi-arah.' },
+    { id:7, q:'Contoh sendi mati adalah...', opts:['Tulang tengkorak','Pergelangan tangan','Lutut'], a:0, exp:'Sendi mati (sinartrosis) pada sutura tengkorak.' },
+    { id:8, q:'Sistem hormon berfungsi untuk...', opts:['Mengangkut oksigen','Mengatur pertumbuhan & metabolisme','Menghasilkan listrik'], a:1, exp:'Kelenjar endokrin mengatur banyak fungsi tubuh.' }
+  ];
+  const quizForm = $('#quizForm');
+  $('#totalQ').textContent = questions.length;
+
+  function renderQuiz(){
+    quizForm.innerHTML = '';
+    questions.forEach((it, idx)=>{
+      const wrap = document.createElement('div');
+      wrap.className = 'rounded-xl bg-white/5 border border-white/10 p-4';
+      const title = document.createElement('p');
+      title.className = 'font-semibold mb-2';
+      title.textContent = `${idx+1}. ${it.q}`;
+      wrap.appendChild(title);
+      const group = document.createElement('div');
+      group.className = 'grid sm:grid-cols-3 gap-2';
+      it.opts.forEach((op, oi)=>{
+        const label = document.createElement('label');
+        label.className = 'flex gap-2 items-center rounded-lg bg-white/5 border border-white/10 p-2 cursor-pointer hover:bg-white/10';
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = 'q'+it.id;
+        input.value = oi;
+        const span = document.createElement('span');
+        span.textContent = op;
+        label.append(input, span);
+        group.appendChild(label);
+      });
+      const feedback = document.createElement('div');
+      feedback.id = 'fb'+it.id;
+      feedback.className = 'mt-2 text-sm';
+      wrap.append(group, feedback);
+      quizForm.append(wrap);
+    });
+    $('#quizMsg').textContent = 'Jawab semua lalu tekan Periksa.';
+    updateQuizBar();
+  }
+  function getAnswers(){
+    return questions.map(it=>{
+      const chosen = $('input[name="q'+it.id+'"]:checked');
+      return { id: it.id, chosen: chosen ? Number(chosen.value) : null };
+    });
+  }
+  function updateQuizBar(){
+    const answered = getAnswers().filter(a=> a.chosen !== null).length;
+    const pct = Math.round((answered/questions.length)*100);
+    $('#quizBar').style.width = pct+'%';
+  }
+  quizForm.addEventListener('change', updateQuizBar);
+
+  function gradeQuiz(){
+    let score=0;
+    getAnswers().forEach(ans=>{
+      const q = questions.find(x=> x.id===ans.id);
+      const fb = $('#fb'+ans.id);
+      if(ans.chosen === null){
+        fb.textContent = 'Belum dijawab.';
+        fb.className = 'mt-2 text-sm text-yellow-300';
+      } else if(ans.chosen === q.a){
+        fb.textContent = 'Benar!';
+        fb.className = 'mt-2 text-sm text-emerald-300';
+        score++;
+      } else {
+        fb.textContent = 'Kurang tepat.';
+        fb.className = 'mt-2 text-sm text-rose-300';
+      }
+    });
+    $('#score').textContent = score;
+    $('#quizMsg').textContent = score===questions.length ? 'Sempurna! 🎉' : 'Lihat pembahasan untuk belajar dari jawaban.';
+  }
+
+  function explainQuiz(){
+    getAnswers().forEach(ans=>{
+      const q = questions.find(x=> x.id===ans.id);
+      const fb = $('#fb'+ans.id);
+      fb.textContent += ' ' + (q?.exp || '');
+    });
+  }
+
+  function restartQuiz(){
+    renderQuiz();
+    $('#score').textContent = 0;
+    $('#quizBar').style.width = '0%';
+  }
+
+  $('#submitQuiz').addEventListener('click', (e)=>{ e.preventDefault(); gradeQuiz(); });
+  $('#showExplain').addEventListener('click', (e)=>{ e.preventDefault(); explainQuiz(); });
+  $('#restartQuiz').addEventListener('click', (e)=>{ e.preventDefault(); restartQuiz(); });
+  renderQuiz();
+
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'981ff7d8c1d89ca5',t:'MTc1ODM1NzEwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
