@@ -1,12 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
- <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sistem Tubuh Manusia - Interaktif Sederhana</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&amp;display=swap" rel="stylesheet">
-  <style>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistem Gerak Manusia - Interaktif Sederhana</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
   body { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
   .svg-part { transition: opacity .25s ease, filter .25s ease; }
   .dimmed { opacity:.15 !important; }
@@ -20,425 +20,394 @@
   }
   .btn:hover::after{ opacity:1; }
 </style>
-  <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
- </head>
- <body class="min-h-screen bg-gradient-to-br from-indigo-900 via-slate-900 to-cyan-900 text-white">
-  <header class="mx-auto max-w-6xl px-4 pt-10 pb-6">
-   <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-900 via-slate-900 to-cyan-900 text-white">
+
+<header class="mx-auto max-w-6xl px-4 pt-10 pb-6">
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
     <div>
-     <h1 class="text-3xl md:text-5xl font-extrabold">Sistem Tubuh Manusia</h1>
-     <p class="text-cyan-200/90 mt-2 max-w-2xl">Versi sederhana yang stabil: sorot rangka, ubah posisi lengan (fleksi/ekstensi), dan lihat contoh sendi tanpa animasi berat.</p>
+      <h1 class="text-3xl md:text-5xl font-extrabold">Sistem Tubuh Manusia</h1>
+      <p class="text-cyan-200/90 mt-2 max-w-2xl">Versi sederhana yang stabil: sorot rangka, ubah posisi lengan (fleksi/ekstensi), dan lihat contoh sendi tanpa animasi berat.</p>
     </div>
-    <div class="flex items-center gap-3"><button id="btnReset" class="btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15">Reset</button> <button id="btnHelp" class="btn px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Cara Pakai</button>
+    <div class="flex items-center gap-3">
+      <button id="btnReset" class="btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15">Reset</button>
+      <button id="btnHelp" class="btn px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Cara Pakai</button>
     </div>
-   </div>
-   <div id="helper" class="mt-4 hidden">
+  </div>
+  <div id="helper" class="mt-4 hidden">
     <div class="rounded-xl bg-white/10 border border-white/15 p-4 text-sm text-cyan-100">
-     • Tab di bawah untuk berpindah topik. • Rangka: klik Sorot Aksial/Apendikular. • Otot: tekan Fleksi/Ekstensi. • Sendi: pilih jenis sendi untuk melihat gerak. • Reproduksi: geser slider tahap. • Saraf: klik Mulai Refleks. • Pencernaan: jalankan peristaltik dan langkah-langkahnya. • Peredaran Darah: lihat sirkulasi darah ke paru-paru dan tubuh.
+      • Tab di bawah untuk berpindah topik. • Rangka: klik Sorot Aksial/Apendikular. • Otot: tekan Fleksi/Ekstensi untuk melihat perubahan sederhana. • Sendi: pilih jenis sendi dari daftar.
     </div>
-   </div>
-   <div class="mt-6 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"></div>
-  </header>
-  <main class="mx-auto max-w-6xl px-4 pb-20"><!-- Tabs -->
-   <nav class="sticky top-2 z-10">
-    <div class="rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-2 flex flex-wrap gap-2"><button data-tab="rangka" class="tab btn px-4 py-2 rounded-xl bg-violet-600 text-white font-semibold" aria-selected="true">Rangka</button> <button data-tab="otot" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10" aria-selected="false">Otot</button> <button data-tab="sendi" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10" aria-selected="false">Sendi</button> <button data-tab="repro" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10" aria-selected="false">Reproduksi</button> <button data-tab="saraf" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10" aria-selected="false">Sistem Saraf</button> <button data-tab="pencernaan" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10" aria-selected="false">Pencernaan</button> <button data-tab="peredaran" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10" aria-selected="false">Peredaran Darah</button> <button data-tab="sehat" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10" aria-selected="false">Pola Sehat</button> <button data-tab="kuis" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10" aria-selected="false">Kuis</button>
+  </div>
+  <div class="mt-6 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent"></div>
+</header>
+
+<main class="mx-auto max-w-6xl px-4 pb-20">
+  <!-- Tabs -->
+  <nav class="sticky top-2 z-10">
+    <div class="rounded-2xl bg-white/5 backdrop-blur border border-white/10 p-2 flex flex-wrap gap-2">
+      <button data-tab="rangka" class="tab btn px-4 py-2 rounded-xl bg-violet-600 text-white font-semibold">Rangka</button>
+      <button data-tab="otot" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Otot</button>
+      <button data-tab="sendi" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Sendi</button>
+      <button data-tab="repro" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Reproduksi</button>
+      <button data-tab="saraf" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Sistem Saraf</button>
+      <button data-tab="sehat" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Pola Sehat</button>
+      <button data-tab="kuis" class="tab btn px-4 py-2 rounded-xl hover:bg-white/10 border border-white/10">Kuis</button>
     </div>
-   </nav><!-- Panel Rangka -->
-   <section id="panel-rangka" class="panel mt-8 grid lg:grid-cols-2 gap-8">
+  </nav>
+
+  <!-- Panel Rangka -->
+  <section id="panel-rangka" class="panel mt-8 grid lg:grid-cols-2 gap-8">
     <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h2 class="text-xl font-bold mb-3">🦴 Rangka Tubuh</h2>
-     <p class="text-sm text-cyan-100/85 mb-4">Tekan tombol sorot untuk membedakan kelompok tulang.</p>
-     <div class="flex gap-2 flex-wrap mb-4"><button id="btnAxial" class="btn px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 font-semibold">Sorot Aksial</button> <button id="btnAppend" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Sorot Apendikular</button> <button id="btnClear" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Bersihkan</button>
-     </div>
-     <div class="relative mx-auto max-w-sm">
-      <svg id="svgBody" viewbox="0 0 300 600" class="w-full"><!-- Outline (dekoratif) --> <g fill="none" stroke="#a5b4fc" stroke-width="2" opacity="0.5">
-        <path d="M150 70 C130 70 110 85 110 110 L110 200 C110 220 120 240 150 240 C180 240 190 220 190 200 L190 110 C190 85 170 70 150 70 Z" />
-        <path d="M130 240 L170 240 L185 280 L115 280 Z" />
-       </g> <!-- Aksial --> <g id="ax-skull" class="svg-part" data-group="ax" fill="#a78bfa" fill-opacity="0.15" stroke="#a78bfa">
-        <circle cx="150" cy="45" r="28" />
-       </g> <g id="ax-spine" class="svg-part" data-group="ax">
-        <path d="M150 75 L150 230" stroke="#a78bfa" stroke-width="8" stroke-linecap="round" />
-       </g> <g id="ax-ribs" class="svg-part" data-group="ax" stroke="#a78bfa" fill="none">
-        <ellipse cx="150" cy="150" rx="30" ry="40" stroke-width="3" />
-        <path d="M150 120 C120 120 110 140 110 150" />
-        <path d="M150 130 C118 130 108 150 108 160" />
-        <path d="M150 140 C116 140 106 160 106 170" />
-        <path d="M150 150 C120 150 110 170 110 180" />
-        <path d="M150 120 C180 120 190 140 190 150" />
-        <path d="M150 130 C182 130 192 150 192 160" />
-        <path d="M150 140 C184 140 194 160 194 170" />
-        <path d="M150 150 C180 150 190 170 190 180" />
-       </g> <!-- Apendikular --> <g id="ap-upper" class="svg-part" data-group="ap">
-        <line x1="115" y1="150" x2="95" y2="210" stroke="#22d3ee" stroke-width="8" stroke-linecap="round" />
-        <line x1="95" y1="210" x2="85" y2="260" stroke="#22d3ee" stroke-width="6" stroke-linecap="round" />
-        <line x1="185" y1="150" x2="205" y2="210" stroke="#22d3ee" stroke-width="8" stroke-linecap="round" />
-        <line x1="205" y1="210" x2="215" y2="260" stroke="#22d3ee" stroke-width="6" stroke-linecap="round" />
-       </g> <g id="ap-hand" class="svg-part" data-group="ap">
-        <circle cx="82" cy="270" r="10" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee" />
-        <circle cx="218" cy="270" r="10" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee" />
-       </g> <g id="ap-pelvic" class="svg-part" data-group="ap">
-        <path d="M125 240 C150 270 150 270 175 240" fill="none" stroke="#22d3ee" stroke-width="6" stroke-linecap="round" />
-       </g> <g id="ap-lower" class="svg-part" data-group="ap">
-        <line x1="140" y1="285" x2="135" y2="410" stroke="#22d3ee" stroke-width="10" stroke-linecap="round" />
-        <line x1="160" y1="285" x2="165" y2="410" stroke="#22d3ee" stroke-width="10" stroke-linecap="round" />
-        <line x1="135" y1="410" x2="132" y2="540" stroke="#22d3ee" stroke-width="8" stroke-linecap="round" />
-        <line x1="165" y1="410" x2="168" y2="540" stroke="#22d3ee" stroke-width="8" stroke-linecap="round" />
-       </g> <g id="ap-feet" class="svg-part" data-group="ap">
-        <ellipse cx="128" cy="552" rx="16" ry="6" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee" />
-        <ellipse cx="172" cy="552" rx="16" ry="6" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee" />
-       </g>
+      <h2 class="text-xl font-bold mb-3">🦴 Rangka Tubuh</h2>
+      <p class="text-sm text-cyan-100/85 mb-4">Tekan tombol sorot untuk membedakan kelompok tulang.</p>
+      <div class="flex gap-2 flex-wrap mb-4">
+        <button id="btnAxial" class="btn px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 font-semibold">Sorot Aksial</button>
+        <button id="btnAppend" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Sorot Apendikular</button>
+        <button id="btnClear" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Bersihkan</button>
+      </div>
+
+      <div class="relative mx-auto max-w-sm">
+        <svg id="svgBody" viewBox="0 0 300 600" class="w-full">
+          <!-- Outline (dekoratif) -->
+          <g fill="none" stroke="#a5b4fc" stroke-width="2" opacity="0.5">
+            <path d="M150 70 C130 70 110 85 110 110 L110 200 C110 220 120 240 150 240 C180 240 190 220 190 200 L190 110 C190 85 170 70 150 70 Z" />
+            <path d="M130 240 L170 240 L185 280 L115 280 Z" />
+          </g>
+
+          <!-- Aksial -->
+          <g id="ax-skull" class="svg-part" data-group="ax" fill="#a78bfa" fill-opacity="0.15" stroke="#a78bfa">
+            <circle cx="150" cy="45" r="28"></circle>
+          </g>
+          <g id="ax-spine" class="svg-part" data-group="ax">
+            <path d="M150 75 L150 230" stroke="#a78bfa" stroke-width="8" stroke-linecap="round"/>
+          </g>
+          <g id="ax-ribs" class="svg-part" data-group="ax" stroke="#a78bfa" fill="none">
+            <ellipse cx="150" cy="150" rx="30" ry="40" stroke-width="3"/>
+            <path d="M150 120 C120 120 110 140 110 150" />
+            <path d="M150 130 C118 130 108 150 108 160" />
+            <path d="M150 140 C116 140 106 160 106 170" />
+            <path d="M150 150 C120 150 110 170 110 180" />
+            <path d="M150 120 C180 120 190 140 190 150" />
+            <path d="M150 130 C182 130 192 150 192 160" />
+            <path d="M150 140 C184 140 194 160 194 170" />
+            <path d="M150 150 C180 150 190 170 190 180" />
+          </g>
+
+          <!-- Apendikular -->
+          <g id="ap-upper" class="svg-part" data-group="ap">
+            <line x1="115" y1="150" x2="95"  y2="210" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+            <line x1="95"  y1="210" x2="85"  y2="260" stroke="#22d3ee" stroke-width="6" stroke-linecap="round"/>
+            <line x1="185" y1="150" x2="205" y2="210" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+            <line x1="205" y1="210" x2="215" y2="260" stroke="#22d3ee" stroke-width="6" stroke-linecap="round"/>
+          </g>
+          <g id="ap-hand" class="svg-part" data-group="ap">
+            <circle cx="82" cy="270" r="10" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee" />
+            <circle cx="218" cy="270" r="10" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee" />
+          </g>
+          <g id="ap-pelvic" class="svg-part" data-group="ap">
+            <path d="M125 240 C150 270 150 270 175 240" fill="none" stroke="#22d3ee" stroke-width="6" stroke-linecap="round"/>
+          </g>
+          <g id="ap-lower" class="svg-part" data-group="ap">
+            <line x1="140" y1="285" x2="135" y2="410" stroke="#22d3ee" stroke-width="10" stroke-linecap="round"/>
+            <line x1="160" y1="285" x2="165" y2="410" stroke="#22d3ee" stroke-width="10" stroke-linecap="round"/>
+            <line x1="135" y1="410" x2="132" y2="540" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+            <line x1="165" y1="410" x2="168" y2="540" stroke="#22d3ee" stroke-width="8" stroke-linecap="round"/>
+          </g>
+          <g id="ap-feet" class="svg-part" data-group="ap">
+            <ellipse cx="128" cy="552" rx="16" ry="6" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee"/>
+            <ellipse cx="172" cy="552" rx="16" ry="6" fill="#22d3ee" fill-opacity="0.2" stroke="#22d3ee"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+      <h3 class="font-bold mb-2">Ringkas:</h3>
+      <ul class="list-disc ml-6 text-cyan-100/85 text-sm space-y-1">
+        <li>Aksial: tengkorak, tulang belakang, dada & rusuk (perlindungan).</li>
+        <li>Apendikular: lengan & kaki (pergerakan).</li>
+        <li>Otot aktif menggerakkan tulang; otot bekerja antagonis (berlawanan).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Panel Otot (sederhana) -->
+  <section id="panel-otot" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
+    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+      <h2 class="text-xl font-bold mb-3">💪 Jenis Otot</h2>
+      <div class="grid sm:grid-cols-3 gap-4 text-sm">
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p class="font-semibold">Polos</p><p class="text-cyan-100/85">Tak sadar, organ pencernaan.</p>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p class="font-semibold">Lurik</p><p class="text-cyan-100/85">Sadar, menempel di rangka.</p>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p class="font-semibold">Jantung</p><p class="text-cyan-100/85">Tak sadar, khusus jantung.</p>
+        </div>
+      </div>
+      <div class="mt-4 text-sm text-cyan-100/85">
+        Antagonis: Fleksi lengan = bisep kontraksi, trisep relaksasi. Ekstensi = sebaliknya.
+      </div>
+    </div>
+
+    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+      <h3 class="font-bold mb-3">Simulasi Sederhana: Lengan</h3>
+      <div class="flex gap-2 mb-3 flex-wrap">
+        <button id="btnFlex" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Fleksi</button>
+        <button id="btnExtend" class="btn px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 font-semibold">Ekstensi</button>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4 items-center">
+        <div class="sm:col-span-2">
+          <svg id="armSvg" viewBox="0 0 420 220" class="w-full">
+            <!-- Bahu -->
+            <circle cx="60" cy="110" r="14" fill="#a78bfa"/>
+            <!-- Lengan atas -->
+            <rect x="75" y="96" width="110" height="28" rx="14" fill="#94a3b8"/>
+            <!-- Siku -->
+            <circle cx="190" cy="110" r="9" fill="#22d3ee"/>
+            <!-- Lengan bawah (rotate di siku) -->
+            <g id="foreGroup" transform="rotate(0,190,110)">
+              <rect x="190" y="101" width="110" height="18" rx="9" fill="#94a3b8"/>
+              <rect x="300" y="95" width="28" height="30" rx="8" fill="#22d3ee" fill-opacity="0.6"/>
+            </g>
+            <!-- Bisep / Trisep (ukuran berubah sederhana) -->
+            <ellipse id="biceps" cx="130" cy="82" rx="30" ry="14" fill="#22d3ee" fill-opacity="0.35"/>
+            <ellipse id="triceps" cx="130" cy="140" rx="40" ry="16" fill="#a78bfa" fill-opacity="0.35"/>
+          </svg>
+        </div>
+        <div class="sm:col-span-1 space-y-2 text-sm">
+          <div class="rounded-xl bg-white/5 border border-white/10 p-3">
+            Bisep: <span id="lblBiceps" class="font-semibold text-cyan-300">Relaksasi</span>
+          </div>
+          <div class="rounded-xl bg-white/5 border border-white/10 p-3">
+            Trisep: <span id="lblTriceps" class="font-semibold text-violet-300">Kontraksi</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Panel Sendi (tanpa animasi) -->
+  <section id="panel-sendi" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
+    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+      <h2 class="text-xl font-bold mb-3">🦵 Jenis Sendi</h2>
+      <p class="text-sm text-cyan-100/85 mb-3">Pilih jenis sendi untuk melihat gambaran geraknya.</p>
+      <select id="jointSelect" class="w-full text-slate-900 rounded-lg p-2">
+        <option value="">— Pilih —</option>
+        <option value="engsel">Engsel (satu arah)</option>
+        <option value="peluru">Peluru (segala arah)</option>
+        <option value="pelana">Pelana (dua arah)</option>
+        <option value="putar">Putar (memutar)</option>
+        <option value="geser">Geser (menggeser)</option>
+      </select>
+      <div id="jointNote" class="mt-3 text-sm text-cyan-100/85">Belum dipilih.</div>
+    </div>
+
+    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
+      <h3 class="font-bold mb-3">Ilustrasi</h3>
+      <svg id="jointSvg" viewBox="0 0 420 200" class="w-full">
+        <rect x="24" y="170" width="372" height="8" rx="4" fill="#0ea5e9" opacity=".35"/>
+        <g id="demoArea"></g>
       </svg>
-     </div>
     </div>
+  </section>
+
+  <!-- Panel Reproduksi -->
+  <section id="panel-repro" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
     <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h3 class="font-bold mb-2">Ringkas:</h3>
-     <ul class="list-disc ml-6 text-cyan-100/85 text-sm space-y-1">
-      <li>Aksial: tengkorak, tulang belakang, dada &amp; rusuk (perlindungan).</li>
-      <li>Apendikular: lengan &amp; kaki (pergerakan).</li>
-      <li>Otot aktif menggerakkan tulang; otot bekerja antagonis (berlawanan).</li>
-     </ul>
+      <h2 class="text-xl font-bold mb-3">🧬 Sistem Reproduksi</h2>
+      <p class="text-sm text-cyan-100/85 mb-3">Fungsi utama: menghasilkan keturunan. Organ utama: <span class="font-semibold">testis</span> (laki-laki) & <span class="font-semibold">ovarium</span> (perempuan).</p>
+      <div class="grid sm:grid-cols-2 gap-4 text-sm">
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p class="font-semibold">Laki-laki</p>
+          <ul class="list-disc ml-5 text-cyan-100/85">
+            <li>Testis: menghasilkan sperma & hormon testosteron</li>
+            <li>Saluran: epididimis → vas deferens → uretra</li>
+          </ul>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p class="font-semibold">Perempuan</p>
+          <ul class="list-disc ml-5 text-cyan-100/85">
+            <li>Ovarium: menghasilkan ovum & hormon estrogen/progesteron</li>
+            <li>Saluran: tuba falopi → uterus → vagina</li>
+          </ul>
+        </div>
+      </div>
     </div>
-   </section><!-- Panel Otot -->
-   <section id="panel-otot" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
+
     <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h2 class="text-xl font-bold mb-3">💪 Jenis Otot</h2>
-     <div class="grid sm:grid-cols-3 gap-4 text-sm">
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Polos</p>
-       <p class="text-cyan-100/85">Tak sadar, organ pencernaan.</p>
+      <h3 class="font-bold mb-3">Simulasi Sederhana: Pertemuan Sel</h3>
+      <p class="text-xs text-cyan-100/80 mb-2">Geser slider untuk melihat tahap pertemuan sel (ilustrasi edukatif sederhana, tanpa detail biologis).</p>
+      <div class="flex items-center gap-3 mb-3">
+        <input id="stageRange" class="w-full" type="range" min="0" max="3" step="1" value="0" />
+        <span id="stageLabel" class="text-sm font-semibold">Tahap 1</span>
       </div>
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Lurik</p>
-       <p class="text-cyan-100/85">Sadar, menempel di rangka.</p>
-      </div>
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Jantung</p>
-       <p class="text-cyan-100/85">Tak sadar, khusus jantung.</p>
-      </div>
-     </div>
-     <div class="mt-4 text-sm text-cyan-100/85">
-      Antagonis: Fleksi lengan = bisep kontraksi, trisep relaksasi. Ekstensi = sebaliknya.
-     </div>
+      <svg id="reproSvg" viewBox="0 0 420 220" class="w-full">
+        <rect x="10" y="10" width="400" height="200" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" />
+        <g id="reproScene"></g>
+      </svg>
+      <div id="reproNote" class="mt-2 text-xs text-cyan-100/85">Tahap 1: Sel terpisah.</div>
     </div>
+  </section>
+
+  <!-- Panel Saraf -->
+  <section id="panel-saraf" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
     <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h3 class="font-bold mb-3">Simulasi Sederhana: Lengan</h3>
-     <div class="flex gap-2 mb-3 flex-wrap"><button id="btnFlex" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Fleksi</button> <button id="btnExtend" class="btn px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 font-semibold">Ekstensi</button>
-     </div>
-     <div class="grid sm:grid-cols-3 gap-4 items-center">
-      <div class="sm:col-span-2">
-       <svg id="armSvg" viewbox="0 0 420 220" class="w-full"><circle cx="60" cy="110" r="14" fill="#a78bfa" /> <rect x="75" y="96" width="110" height="28" rx="14" fill="#94a3b8" /> <circle cx="190" cy="110" r="9" fill="#22d3ee" /> <g id="foreGroup" transform="rotate(0,190,110)">
-         <rect x="190" y="101" width="110" height="18" rx="9" fill="#94a3b8" />
-         <rect x="300" y="95" width="28" height="30" rx="8" fill="#22d3ee" fill-opacity="0.6" />
-        </g> <ellipse id="biceps" cx="130" cy="82" rx="30" ry="14" fill="#22d3ee" fill-opacity="0.35" /> <ellipse id="triceps" cx="130" cy="140" rx="40" ry="16" fill="#a78bfa" fill-opacity="0.35" />
-       </svg>
+      <h2 class="text-xl font-bold mb-3">🧠 Sistem Saraf</h2>
+      <p class="text-sm text-cyan-100/85 mb-3">Pusat pengendali dan komunikasi tubuh. Terdiri dari <span class="font-semibold">otak</span>, <span class="font-semibold">sumsum tulang belakang</span>, dan saraf tepi.</p>
+      <div class="grid sm:grid-cols-3 gap-4 text-sm mb-4">
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p class="font-semibold">Sistem Saraf Pusat</p>
+          <p class="text-cyan-100/85">Otak dan sumsum tulang belakang.</p>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p class="font-semibold">Sistem Saraf Tepi</p>
+          <p class="text-cyan-100/85">Saraf sensorik & motorik.</p>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+          <p class="font-semibold">Refleks</p>
+          <p class="text-cyan-100/85">Respon cepat melalui sumsum tulang belakang.</p>
+        </div>
       </div>
-      <div class="sm:col-span-1 space-y-2 text-sm">
-       <div class="rounded-xl bg-white/5 border border-white/10 p-3">
-        Bisep: <span id="lblBiceps" class="font-semibold text-cyan-300">Relaksasi</span>
-       </div>
-       <div class="rounded-xl bg-white/5 border border-white/10 p-3">
-        Trisep: <span id="lblTriceps" class="font-semibold text-violet-300">Kontraksi</span>
-       </div>
+      <div class="rounded-xl bg-white/5 border border-white/10 p-4 text-sm space-y-3">
+        <p><span class="font-semibold">Peran Reseptor & Efektor:</span> Reseptor menerima rangsangan dari luar/dalam tubuh. Efektor menanggapi perintah saraf.</p>
+        <div>
+          <p class="font-semibold">Reseptor</p>
+          <p class="text-cyan-100/85">Ujung saraf peka rangsang (cahaya, sentuhan, suhu, tekanan, bahan kimia). Ada pada mata, telinga, kulit, hidung, lidah. Mengubah rangsang menjadi impuls ke otak/sumsum untuk diolah.</p>
+        </div>
+        <div>
+          <p class="font-semibold">Efektor</p>
+          <ul class="list-disc ml-5 text-cyan-100/85">
+            <li>Otot: berkontraksi atau relaksasi sebagai respons.</li>
+            <li>Kelenjar: mengeluarkan hormon/zat sebagai respons.</li>
+          </ul>
+        </div>
+        <div class="rounded-lg bg-white/5 border border-white/10 p-3">
+          <p class="font-semibold">Contoh</p>
+          <p class="text-cyan-100/85">Menyentuh benda panas: <span class="font-semibold">reseptor kulit</span> merasakan panas → impuls ke otak/sumsum → <span class="font-semibold">otot tangan (efektor)</span> menarik tangan menjauh.</p>
+        </div>
       </div>
-     </div>
     </div>
-   </section><!-- Panel Sendi -->
-   <section id="panel-sendi" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
+
     <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h2 class="text-xl font-bold mb-3">🦵 Jenis Sendi</h2>
-     <p class="text-sm text-cyan-100/85 mb-3">Pilih jenis sendi untuk melihat gambaran geraknya.</p><select id="jointSelect" class="w-full text-slate-900 rounded-lg p-2"> <option value="">— Pilih —</option> <option value="engsel">Engsel (satu arah)</option> <option value="peluru">Peluru (segala arah)</option> <option value="pelana">Pelana (dua arah)</option> <option value="putar">Putar (memutar)</option> <option value="geser">Geser (menggeser)</option> </select>
-     <div id="jointNote" class="mt-3 text-sm text-cyan-100/85">
-      Belum dipilih.
-     </div>
+      <h3 class="font-bold mb-3">Simulasi: Rangkaian Refleks</h3>
+      <p class="text-xs text-cyan-100/80 mb-2">Jalur sinyal: reseptor (menerima rangsang) → sumsum (olah cepat) → efektor (menanggapi: otot/kelenjar). Contoh: tangan menyentuh panas.</p>
+      <div class="flex items-center gap-2 mb-3 flex-wrap">
+        <button id="btnRefleks" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Mulai Refleks</button>
+        <button id="btnRefleksReset" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Reset</button>
+        <span id="refleksNote" class="text-sm text-cyan-100/85">Reseptor menerima rangsang → impuls ke sumsum → perintah ke efektor.</span>
+      </div>
+      <svg id="sarafSvg" viewBox="0 0 420 220" class="w-full">
+        <rect x="10" y="10" width="400" height="200" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" />
+        <g id="sarafScene"></g>
+      </svg>
     </div>
+  </section>
+
+  <!-- Panel Sehat -->
+  <section id="panel-sehat" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
     <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h3 class="font-bold mb-3">Ilustrasi</h3>
-     <svg id="jointSvg" viewbox="0 0 420 200" class="w-full"><rect x="24" y="170" width="372" height="8" rx="4" fill="#0ea5e9" opacity=".35" /> <g id="demoArea"></g>
-     </svg>
+      <h2 class="text-xl font-bold mb-3">🏃 Kebiasaan Sehat</h2>
+      <form id="habitForm" class="grid sm:grid-cols-2 gap-3">
+        <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer">
+          <input type="checkbox" name="habit" value="makan" class="mt-1">
+          <span><span class="font-semibold">Makanan Bergizi</span><span class="block text-sm text-cyan-100/85">Seimbang sayur, buah, protein, karbo.</span></span>
+        </label>
+        <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer">
+          <input type="checkbox" name="habit" value="olahraga" class="mt-1">
+          <span><span class="font-semibold">Olahraga Teratur</span><span class="block text-sm text-cyan-100/85">Perkuat otot & tulang.</span></span>
+        </label>
+        <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer">
+          <input type="checkbox" name="habit" value="istirahat" class="mt-1">
+          <span><span class="font-semibold">Istirahat Cukup</span><span class="block text-sm text-cyan-100/85">Tidur yang cukup.</span></span>
+        </label>
+        <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer">
+          <input type="checkbox" name="habit" value="air" class="mt-1">
+          <span><span class="font-semibold">Minum Air</span><span class="block text-sm text-cyan-100/85">Target 6–8 gelas/hari.</span></span>
+        </label>
+        <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer sm:col-span-2">
+          <input type="checkbox" name="habit" value="bersih" class="mt-1">
+          <span><span class="font-semibold">Kebersihan Diri</span><span class="block text-sm text-cyan-100/85">Mandi, cuci tangan, lingkungan bersih.</span></span>
+        </label>
+        <div class="sm:col-span-2 flex items-center gap-3">
+          <button id="saveHabit" class="btn px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Simpan</button>
+          <button id="resetHabit" class="btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10">Reset</button>
+          <div id="habitMsg" class="text-sm text-cyan-100/85"></div>
+        </div>
+      </form>
+      <div class="mt-4">
+        <div class="h-3 rounded-full bg-white/10 overflow-hidden">
+          <div id="habitBar" class="h-3 bg-gradient-to-r from-cyan-400 to-violet-500 rounded-full transition-all" style="width:0%"></div>
+        </div>
+      </div>
     </div>
-   </section><!-- Panel Reproduksi -->
-   <section id="panel-repro" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
+
     <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h2 class="text-xl font-bold mb-3">🧬 Sistem Reproduksi</h2>
-     <p class="text-sm text-cyan-100/85 mb-3">Fungsi utama: menghasilkan keturunan. Organ utama: <span class="font-semibold">testis</span> (laki-laki) &amp; <span class="font-semibold">ovarium</span> (perempuan).</p>
-     <div class="grid sm:grid-cols-2 gap-4 text-sm">
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Laki-laki</p>
-       <ul class="list-disc ml-5 text-cyan-100/85">
-        <li>Testis: menghasilkan sperma &amp; hormon testosteron</li>
-        <li>Saluran: epididimis → vas deferens → uretra</li>
-       </ul>
+      <h3 class="font-bold mb-3">🔵 Pelacak Air Minum</h3>
+      <div class="flex items-center gap-3">
+        <button id="waterMinus" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">- 1</button>
+        <div class="text-3xl font-extrabold"><span id="waterCount">0</span> gelas</div>
+        <button id="waterPlus" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">+ 1</button>
       </div>
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Perempuan</p>
-       <ul class="list-disc ml-5 text-cyan-100/85">
-        <li>Ovarium: menghasilkan ovum &amp; hormon estrogen/progesteron</li>
-        <li>Saluran: tuba falopi → uterus → vagina</li>
-       </ul>
+      <div class="mt-3 h-2 rounded bg-white/10">
+        <div id="waterBar" class="h-2 bg-cyan-400 rounded transition-all" style="width:0%"></div>
       </div>
-     </div>
+      <div id="waterNote" class="mt-2 text-sm text-cyan-100/85">Target sehat: 6–8 gelas/hari.</div>
     </div>
+  </section>
+
+  <!-- Panel Kuis -->
+  <section id="panel-kuis" class="panel hidden mt-8">
     <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h3 class="font-bold mb-3">Simulasi Sederhana: Pertemuan Sel</h3>
-     <p class="text-xs text-cyan-100/80 mb-2">Geser slider untuk melihat tahap pertemuan sel (ilustrasi edukatif sederhana, tanpa detail biologis).</p>
-     <div class="flex items-center gap-3 mb-3"><input id="stageRange" class="w-full" type="range" min="0" max="3" step="1" value="0"> <span id="stageLabel" class="text-sm font-semibold">Tahap 1</span>
-     </div>
-     <svg id="reproSvg" viewbox="0 0 420 220" class="w-full"><rect x="10" y="10" width="400" height="200" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" /> <g id="reproScene"></g>
-     </svg>
-     <div id="reproNote" class="mt-2 text-xs text-cyan-100/85">
-      Tahap 1: Sel terpisah.
-     </div>
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold">🎯 Kuis Singkat</h2>
+        <button id="restartQuiz" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Ulang</button>
+      </div>
+      <div class="mt-4 h-2 rounded bg-white/10">
+        <div id="quizBar" class="h-2 bg-gradient-to-r from-cyan-400 to-violet-500 rounded transition-all" style="width:0%"></div>
+      </div>
+      <form id="quizForm" class="mt-5 space-y-5"></form>
+      <div class="mt-5 flex items-center gap-3">
+        <button id="submitQuiz" class="btn px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Periksa</button>
+        <button id="showExplain" class="btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10">Pembahasan</button>
+        <div class="text-sm">Skor: <span id="score" class="font-semibold">0</span>/<span id="totalQ">0</span></div>
+      </div>
     </div>
-   </section><!-- Panel Saraf -->
-   <section id="panel-saraf" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
-    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h2 class="text-xl font-bold mb-3">🧠 Sistem Saraf</h2>
-     <p class="text-sm text-cyan-100/85 mb-3">Pusat pengendali dan komunikasi tubuh. Terdiri dari <span class="font-semibold">otak</span>, <span class="font-semibold">sumsum tulang belakang</span>, dan saraf tepi.</p>
-     <div class="grid sm:grid-cols-3 gap-4 text-sm mb-4">
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Sistem Saraf Pusat</p>
-       <p class="text-cyan-100/85">Otak dan sumsum tulang belakang.</p>
-      </div>
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Sistem Saraf Tepi</p>
-       <p class="text-cyan-100/85">Saraf sensorik &amp; motorik.</p>
-      </div>
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Refleks</p>
-       <p class="text-cyan-100/85">Respon cepat melalui sumsum tulang belakang.</p>
-      </div>
-     </div>
-     <div class="rounded-xl bg-white/5 border border-white/10 p-4 text-sm space-y-3">
-      <p><span class="font-semibold">Peran Reseptor &amp; Efektor:</span> Reseptor menerima rangsangan dari luar/dalam tubuh. Efektor menanggapi perintah saraf.</p>
-      <div>
-       <p class="font-semibold">Reseptor</p>
-       <p class="text-cyan-100/85">Ujung saraf peka rangsang (cahaya, sentuhan, suhu, tekanan, bahan kimia). Ada pada mata, telinga, kulit, hidung, lidah. Mengubah rangsang menjadi impuls ke otak/sumsum untuk diolah.</p>
-      </div>
-      <div>
-       <p class="font-semibold">Efektor</p>
-       <ul class="list-disc ml-5 text-cyan-100/85">
-        <li>Otot: berkontraksi atau relaksasi sebagai respons.</li>
-        <li>Kelenjar: mengeluarkan hormon/zat sebagai respons.</li>
-       </ul>
-      </div>
-      <div class="rounded-lg bg-white/5 border border-white/10 p-3">
-       <p class="font-semibold">Contoh</p>
-       <p class="text-cyan-100/85">Menyentuh benda panas: <span class="font-semibold">reseptor kulit</span> merasakan panas → impuls ke otak/sumsum → <span class="font-semibold">otot tangan (efektor)</span> menarik tangan menjauh.</p>
-      </div>
-     </div>
-    </div>
-    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h3 class="font-bold mb-3">Simulasi: Rangkaian Refleks</h3>
-     <p class="text-xs text-cyan-100/80 mb-2">Jalur sinyal: reseptor (menerima rangsang) → sumsum (olah cepat) → efektor (menanggapi: otot/kelenjar). Contoh: tangan menyentuh panas.</p>
-     <div class="flex items-center gap-2 mb-3 flex-wrap"><button id="btnRefleks" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Mulai Refleks</button> <button id="btnRefleksReset" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Reset</button> <span id="refleksNote" class="text-sm text-cyan-100/85">Reseptor menerima rangsang → impuls ke sumsum → perintah ke efektor.</span>
-     </div>
-     <svg id="sarafSvg" viewbox="0 0 420 220" class="w-full"><rect x="10" y="10" width="400" height="200" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" /> <g id="sarafScene"></g>
-     </svg>
-    </div>
-   </section><!-- Panel Pencernaan -->
-   <section id="panel-pencernaan" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
-    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h2 class="text-xl font-bold mb-3">🍽️ Sistem Pencernaan</h2>
-     <p class="text-sm text-cyan-100/85 mb-3">Mengolah makanan menjadi zat gizi yang diserap tubuh, sisa dibuang.</p>
-     <div class="grid sm:grid-cols-2 gap-4 text-sm">
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Organ Utama</p>
-       <ul class="list-disc ml-5 text-cyan-100/85">
-        <li>Mulut → Kerongkongan</li>
-        <li>Lambung</li>
-        <li>Usus Halus</li>
-        <li>Usus Besar → Rektum</li>
-       </ul>
-      </div>
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Organ Pendukung</p>
-       <ul class="list-disc ml-5 text-cyan-100/85">
-        <li>Hati (empedu)</li>
-        <li>Pankreas (enzim)</li>
-        <li>Kelenjar ludah</li>
-       </ul>
-      </div>
-     </div>
-     <div class="mt-4 rounded-xl bg-white/5 border border-white/10 p-4 text-sm">
-      Alur ringkas: Mengunyah → Menelan → Pencernaan kimia di lambung → Penyerapan di usus halus → Penyerapan air di usus besar → Ekskresi.
-     </div>
-    </div>
-    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h3 class="font-bold mb-3">Simulasi: Peristaltik Sederhana</h3>
-     <p class="text-xs text-cyan-100/80 mb-2">Lihat “bolus” makanan bergerak: Mulut → Kerongkongan → Lambung → Usus Halus → Usus Besar.</p>
-     <div class="flex items-center gap-2 mb-3 flex-wrap"><button id="digStart" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Mulai Otomatis</button> <button id="digStep" class="btn px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 font-semibold">Langkah Berikutnya</button> <button id="digReset" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Reset</button> <span id="digNote" class="text-sm text-cyan-100/85">Posisi: Mulut</span>
-     </div>
-     <svg id="digSvg" viewbox="0 0 420 220" class="w-full"><rect x="10" y="10" width="400" height="200" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" /> <g id="digScene"></g>
-     </svg>
-     <div class="mt-4 rounded-2xl bg-white/5 border border-white/10 p-4">
-      <h4 class="font-semibold mb-2">Tips Menjaga Kesehatan Pencernaan</h4>
-      <ul class="list-disc ml-6 text-sm text-cyan-100/85 space-y-1">
-       <li>Perbanyak serat: sayur, buah, biji-bijian utuh.</li>
-       <li>Minum air cukup sepanjang hari.</li>
-       <li>Kunyah pelan dan makan teratur.</li>
-       <li>Konsumsi probiotik &amp; prebiotik (yogurt, tempe, serat larut).</li>
-       <li>Batasi makanan terlalu pedas/berlemak/berminyak.</li>
-       <li>Kelola stres dan cukup tidur.</li>
-       <li>Aktif bergerak/olahraga ringan.</li>
-       <li>Jaga kebersihan makanan &amp; tangan.</li>
-      </ul>
-     </div>
-    </div>
-   </section><!-- Panel Peredaran Darah -->
-   <section id="panel-peredaran" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
-    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h2 class="text-xl font-bold mb-3">❤️ Sistem Peredaran Darah</h2>
-     <p class="text-sm text-cyan-100/85 mb-3">Mengangkut oksigen, nutrisi, dan membuang limbah metabolisme ke seluruh tubuh.</p>
-     <div class="grid sm:grid-cols-2 gap-4 text-sm mb-4">
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Jantung</p>
-       <p class="text-cyan-100/85">Pompa utama, 4 ruang (2 atrium, 2 ventrikel). Memompa darah ke paru-paru dan seluruh tubuh.</p>
-      </div>
-      <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-       <p class="font-semibold">Pembuluh Darah</p>
-       <ul class="list-disc ml-5 text-cyan-100/85">
-        <li>Arteri: membawa darah keluar jantung</li>
-        <li>Vena: membawa darah ke jantung</li>
-        <li>Kapiler: pertukaran zat di jaringan</li>
-       </ul>
-      </div>
-     </div>
-     <div class="rounded-xl bg-white/5 border border-white/10 p-4 text-sm space-y-2">
-      <p class="font-semibold">Peredaran Darah Ganda</p>
-      <div>
-       <p class="font-semibold text-cyan-300">Peredaran Kecil (Pulmonal)</p>
-       <p class="text-cyan-100/85">Jantung (ventrikel kanan) → Paru-paru (ambil O₂, buang CO₂) → Jantung (atrium kiri)</p>
-      </div>
-      <div>
-       <p class="font-semibold text-violet-300">Peredaran Besar (Sistemik)</p>
-       <p class="text-cyan-100/85">Jantung (ventrikel kiri) → Seluruh tubuh (kirim O₂ &amp; nutrisi) → Jantung (atrium kanan)</p>
-      </div>
-     </div>
-     <div class="mt-4 rounded-xl bg-white/5 border border-white/10 p-4 text-sm">
-      <p class="font-semibold mb-2">Fungsi Darah</p>
-      <ul class="list-disc ml-5 text-cyan-100/85 space-y-1">
-       <li>Mengangkut oksigen dan nutrisi</li>
-       <li>Mengangkut limbah (CO₂, urea) ke organ ekskresi</li>
-       <li>Pertahanan tubuh (sel darah putih, antibodi)</li>
-       <li>Mengatur suhu tubuh</li>
-       <li>Pembekuan darah (trombosit)</li>
-      </ul>
-     </div>
-    </div>
-    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h3 class="font-bold mb-3">Simulasi: Aliran Darah</h3>
-     <p class="text-xs text-cyan-100/80 mb-2">Lihat perjalanan darah: Jantung → Paru-paru (ambil O₂) → Jantung → Tubuh (beri O₂) → Jantung.</p>
-     <div class="flex items-center gap-2 mb-3 flex-wrap"><button id="bloodStart" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Mulai Sirkulasi</button> <button id="bloodReset" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Reset</button> <span id="bloodNote" class="text-sm text-cyan-100/85">Klik Mulai untuk melihat aliran.</span>
-     </div>
-     <svg id="bloodSvg" viewbox="0 0 420 240" class="w-full"><rect x="10" y="10" width="400" height="220" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,255,255,.1)" /> <g id="bloodScene"></g>
-     </svg>
-     <div class="mt-4 rounded-2xl bg-white/5 border border-white/10 p-4">
-      <h4 class="font-semibold mb-2">Tips Menjaga Kesehatan Jantung &amp; Pembuluh Darah</h4>
-      <ul class="list-disc ml-6 text-sm text-cyan-100/85 space-y-1">
-       <li>Olahraga teratur (aerobik: jalan, lari, berenang)</li>
-       <li>Pola makan sehat: kurangi lemak jenuh &amp; garam berlebih</li>
-       <li>Hindari merokok dan alkohol berlebihan</li>
-       <li>Kelola stres dengan baik</li>
-       <li>Tidur cukup (7-8 jam/malam)</li>
-       <li>Cek tekanan darah &amp; kolesterol secara rutin</li>
-       <li>Jaga berat badan ideal</li>
-      </ul>
-     </div>
-    </div>
-   </section><!-- Panel Sehat -->
-   <section id="panel-sehat" class="panel hidden mt-8 grid lg:grid-cols-2 gap-8">
-    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h2 class="text-xl font-bold mb-3">🏃 Kebiasaan Sehat</h2>
-     <form id="habitForm" class="grid sm:grid-cols-2 gap-3"><label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer"> <input type="checkbox" name="habit" value="makan" class="mt-1"> <span><span class="font-semibold">Makanan Bergizi</span><span class="block text-sm text-cyan-100/85">Seimbang sayur, buah, protein, karbo.</span></span> </label> <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer"> <input type="checkbox" name="habit" value="olahraga" class="mt-1"> <span><span class="font-semibold">Olahraga Teratur</span><span class="block text-sm text-cyan-100/85">Perkuat otot &amp; tulang.</span></span> </label> <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer"> <input type="checkbox" name="habit" value="istirahat" class="mt-1"> <span><span class="font-semibold">Istirahat Cukup</span><span class="block text-sm text-cyan-100/85">Tidur yang cukup.</span></span> </label> <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer"> <input type="checkbox" name="habit" value="air" class="mt-1"> <span><span class="font-semibold">Minum Air</span><span class="block text-sm text-cyan-100/85">Target 6–8 gelas/hari.</span></span> </label> <label class="flex items-start gap-3 rounded-xl bg-white/5 border border-white/10 p-3 cursor-pointer sm:col-span-2"> <input type="checkbox" name="habit" value="bersih" class="mt-1"> <span><span class="font-semibold">Kebersihan Diri</span><span class="block text-sm text-cyan-100/85">Mandi, cuci tangan, lingkungan bersih.</span></span> </label>
-      <div class="sm:col-span-2 flex items-center gap-3"><button id="saveHabit" class="btn px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Simpan</button> <button id="resetHabit" class="btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10">Reset</button>
-       <div id="habitMsg" class="text-sm text-cyan-100/85"></div>
-      </div>
-     </form>
-     <div class="mt-4">
-      <div class="h-3 rounded-full bg-white/10 overflow-hidden">
-       <div id="habitBar" class="h-3 bg-gradient-to-r from-cyan-400 to-violet-500 rounded-full transition-all" style="width:0%"></div>
-      </div>
-     </div>
-    </div>
-    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <h3 class="font-bold mb-3">🔵 Pelacak Air Minum</h3>
-     <div class="flex items-center gap-3"><button id="waterMinus" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">- 1</button>
-      <div class="text-3xl font-extrabold">
-       <span id="waterCount">0</span> gelas
-      </div><button id="waterPlus" class="btn px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">+ 1</button>
-     </div>
-     <div class="mt-3 h-2 rounded bg-white/10">
-      <div id="waterBar" class="h-2 bg-cyan-400 rounded transition-all" style="width:0%"></div>
-     </div>
-     <div id="waterNote" class="mt-2 text-sm text-cyan-100/85">
-      Target sehat: 6–8 gelas/hari.
-     </div>
-    </div>
-   </section><!-- Panel Kuis -->
-   <section id="panel-kuis" class="panel hidden mt-8">
-    <div class="rounded-3xl bg-white/5 border border-white/10 p-5">
-     <div class="flex items-center justify-between">
-      <h2 class="text-xl font-bold">🎯 Kuis Singkat</h2><button id="restartQuiz" class="btn px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10">Ulang</button>
-     </div>
-     <div class="mt-4 h-2 rounded bg-white/10">
-      <div id="quizBar" class="h-2 bg-gradient-to-r from-cyan-400 to-violet-500 rounded transition-all" style="width:0%"></div>
-     </div>
-     <form id="quizForm" class="mt-5 space-y-5"></form>
-     <div class="mt-5 flex items-center gap-3"><button id="submitQuiz" class="btn px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-semibold">Periksa</button> <button id="showExplain" class="btn px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10">Pembahasan</button>
-      <div class="text-sm">
-       Skor: <span id="score" class="font-semibold">0</span>/<span id="totalQ">0</span>
-      </div>
-     </div>
-    </div>
-   </section>
-  </main>
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Helper cepat
+  </section>
+</main>
+
+<script>
+  // Helper
   const $ = (q, r=document)=> r.querySelector(q);
   const $$ = (q, r=document)=> Array.from(r.querySelectorAll(q));
-
-  // Efek hover tombol (aman bila elemennya ada)
   $$('.btn').forEach(b=> b.addEventListener('pointermove', e=>{
     const r = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty('--x', (e.clientX - r.left) + 'px');
     e.currentTarget.style.setProperty('--y', (e.clientY - r.top) + 'px');
   }));
 
-  // Tabs kuat + fallback
+  // Tabs
   const tabs = $$('.tab'); const panels = $$('.panel');
   function showTab(name){
-    if(!name) return;
     panels.forEach(p=> p.id==='panel-'+name ? p.classList.remove('hidden') : p.classList.add('hidden'));
     tabs.forEach(t=>{
-      const active = t.dataset.tab===name;
-      t.classList.toggle('bg-violet-600', active);
-      t.classList.toggle('text-white', active);
-      t.classList.toggle('font-semibold', active);
-      t.classList.toggle('hover:bg-white/10', !active);
-      t.classList.toggle('border', !active);
-      t.classList.toggle('border-white/10', !active);
-      t.setAttribute('aria-selected', active ? 'true' : 'false');
-      t.setAttribute('type','button');
+      if(t.dataset.tab===name){
+        t.classList.add('bg-violet-600','text-white','font-semibold');
+        t.classList.remove('hover:bg-white/10','border','border-white/10');
+      }else{
+        t.classList.remove('bg-violet-600','text-white','font-semibold');
+        t.classList.add('hover:bg-white/10','border','border-white/10');
+      }
     });
   }
-  tabs.forEach(t=> t.addEventListener('click', (e)=>{ e.preventDefault(); showTab(t.dataset.tab); }, {passive:false}));
-  document.addEventListener('click', (e)=>{
-    const el = e.target.closest?.('[data-tab]');
-    if(el){ e.preventDefault(); showTab(el.dataset.tab); }
-  }, {passive:false});
-  document.addEventListener('keydown', (e)=>{
-    if((e.key==='Enter'||e.key===' ') && e.target.closest?.('[data-tab]')){
-      e.preventDefault(); showTab(e.target.closest('[data-tab]').dataset.tab);
-    }
-  });
+  tabs.forEach(t=> t.addEventListener('click', ()=> showTab(t.dataset.tab)));
   showTab('rangka');
 
-  // Header
-  $('#btnHelp')?.addEventListener('click', e=>{ e.preventDefault(); $('#helper')?.classList.toggle('hidden'); });
-  $('#btnReset')?.addEventListener('click', e=>{
+  // Header controls
+  $('#btnHelp').addEventListener('click', e=>{ e.preventDefault(); $('#helper').classList.toggle('hidden'); });
+  $('#btnReset').addEventListener('click', e=>{
     e.preventDefault();
     showTab('rangka');
     clearHighlights();
@@ -446,374 +415,384 @@ document.addEventListener('DOMContentLoaded', () => {
     resetHabits();
     resetWater();
     restartQuiz();
-    drawSarafBase();
-    resetDigest();
-    $('#helper')?.classList.add('hidden');
+    $('#helper').classList.add('hidden');
   });
 
-  // Sorot rangka
+  // Rangka: Sorot sederhana (tanpa animasi)
   const axialIds = ['ax-skull','ax-spine','ax-ribs'];
   const appendIds = ['ap-upper','ap-hand','ap-pelvic','ap-lower','ap-feet'];
+
   function setDim(ids, dim){
-    ids.forEach(id=>{ const el = document.getElementById(id); if(el){ el.classList.toggle('dimmed', dim); el.classList.remove('glow-violet','glow-cyan'); } });
+    ids.forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){
+        el.classList.toggle('dimmed', dim);
+        el.classList.remove('glow-violet','glow-cyan');
+      }
+    });
   }
   function addGlow(ids, color){
-    ids.forEach(id=>{ const el = document.getElementById(id); if(el){ el.classList.add(color==='violet'?'glow-violet':'glow-cyan'); } });
+    ids.forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){ el.classList.add(color==='violet' ? 'glow-violet' : 'glow-cyan'); }
+    });
   }
   function clearHighlights(){
     setDim(axialIds, false); setDim(appendIds, false);
-    axialIds.concat(appendIds).forEach(id=> document.getElementById(id)?.classList.remove('glow-violet','glow-cyan'));
+    axialIds.concat(appendIds).forEach(id=>{
+      const el = document.getElementById(id);
+      if(el){ el.classList.remove('glow-violet','glow-cyan'); }
+    });
   }
-  $('#btnAxial')?.addEventListener('click', ()=>{ setDim(axialIds, false); setDim(appendIds, true); addGlow(axialIds, 'violet'); });
-  $('#btnAppend')?.addEventListener('click', ()=>{ setDim(axialIds, true); setDim(appendIds, false); addGlow(appendIds, 'cyan'); });
-  $('#btnClear')?.addEventListener('click', clearHighlights);
+  $('#btnAxial').addEventListener('click', ()=>{
+    setDim(axialIds, false); setDim(appendIds, true);
+    addGlow(axialIds, 'violet');
+  });
+  $('#btnAppend').addEventListener('click', ()=>{
+    setDim(axialIds, true); setDim(appendIds, false);
+    addGlow(appendIds, 'cyan');
+  });
+  $('#btnClear').addEventListener('click', clearHighlights);
 
-  // Otot
-  const fore = $('#foreGroup'); const biceps = $('#biceps'); const triceps = $('#triceps');
+  // Otot: dua keadaan sederhana
+  const fore = $('#foreGroup');
+  const biceps = $('#biceps'); const triceps = $('#triceps');
   const lblBi = $('#lblBiceps'); const lblTr = $('#lblTriceps');
-  function armFlex(){ if(!fore||!biceps||!triceps) return;
+
+  function armFlex(){
+    // sudut sederhana -60 derajat
     fore.setAttribute('transform','rotate(-60,190,110)');
     biceps.setAttribute('rx','36'); biceps.setAttribute('ry','16');
     triceps.setAttribute('rx','28'); triceps.setAttribute('ry','12');
-    if(lblBi) lblBi.textContent = 'Kontraksi';
-    if(lblTr) lblTr.textContent = 'Relaksasi';
+    lblBi.textContent = 'Kontraksi';
+    lblTr.textContent = 'Relaksasi';
   }
-  function armExtend(){ if(!fore||!biceps||!triceps) return;
+  function armExtend(){
     fore.setAttribute('transform','rotate(0,190,110)');
     biceps.setAttribute('rx','30'); biceps.setAttribute('ry','14');
     triceps.setAttribute('rx','40'); triceps.setAttribute('ry','16');
-    if(lblBi) lblBi.textContent = 'Relaksasi';
-    if(lblTr) lblTr.textContent = 'Kontraksi';
+    lblBi.textContent = 'Relaksasi';
+    lblTr.textContent = 'Kontraksi';
   }
-  window.armExtend = armExtend; // untuk dipanggil saat reset
-  $('#btnFlex')?.addEventListener('click', e=>{ e.preventDefault(); armFlex(); });
-  $('#btnExtend')?.addEventListener('click', e=>{ e.preventDefault(); armExtend(); });
-  armExtend();
+  $('#btnFlex').addEventListener('click', e=>{ e.preventDefault(); armFlex(); });
+  $('#btnExtend').addEventListener('click', e=>{ e.preventDefault(); armExtend(); });
+  armExtend(); // default
 
-  // Sendi
+  // Sendi: ilustrasi statis per pilihan
   const demoArea = $('#demoArea'); const jointNote = $('#jointNote'); let animId = null;
-  function clearDemo(){ if(demoArea) demoArea.innerHTML=''; if(animId) cancelAnimationFrame(animId); animId=null; }
+  function clearDemo(){ demoArea.innerHTML=''; if(animId) cancelAnimationFrame(animId); animId = null; }
   function drawHinge(){
-    clearDemo(); if(!demoArea) return;
-    const ns='http://www.w3.org/2000/svg';
-    const base = document.createElementNS(ns,'circle'); base.setAttribute('cx','210'); base.setAttribute('cy','120'); base.setAttribute('r','12'); base.setAttribute('fill','#22d3ee');
-    const bar = document.createElementNS(ns,'rect'); bar.setAttribute('x','110'); bar.setAttribute('y','112'); bar.setAttribute('width','100'); bar.setAttribute('height','16'); bar.setAttribute('rx','8'); bar.setAttribute('fill','#94a3b8');
-    const fore = document.createElementNS(ns,'rect'); fore.setAttribute('x','210'); fore.setAttribute('y','114'); fore.setAttribute('width','120'); fore.setAttribute('height','12'); fore.setAttribute('rx','6'); fore.setAttribute('fill','#94a3b8');
+    clearDemo();
+    const base = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    base.setAttribute('cx','210'); base.setAttribute('cy','120'); base.setAttribute('r','12'); base.setAttribute('fill','#22d3ee');
+    const bar = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    bar.setAttribute('x','110'); bar.setAttribute('y','112'); bar.setAttribute('width','100'); bar.setAttribute('height','16'); bar.setAttribute('rx','8'); bar.setAttribute('fill','#94a3b8');
+    const fore = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    fore.setAttribute('x','210'); fore.setAttribute('y','114'); fore.setAttribute('width','120'); fore.setAttribute('height','12'); fore.setAttribute('rx','6'); fore.setAttribute('fill','#94a3b8');
+    fore.setAttribute('id','hingeFore');
     demoArea.append(bar, base, fore);
-    let angle=-60, dir=1; (function tick(){ if(angle>0) dir=-1; if(angle<-60) dir=1; angle+=dir*2.2; fore.setAttribute('transform',`rotate(${angle},210,120)`); animId=requestAnimationFrame(tick); })();
-    if(jointNote) jointNote.textContent='Sendi Engsel: gerak satu arah (siku/lutut).';
+    // animasi sederhana bolak-balik
+    let angle = -60, dir = 1; cancelAnimationFrame(animId);
+    function tick(){
+      if(angle > 0) dir=-1; if(angle < -60) dir=1; angle += dir*2.2;
+      fore.setAttribute('transform',`rotate(${angle},210,120)`);
+      animId = requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Engsel: gerak satu arah (siku/lutut).';
   }
   function drawBall(){
-    clearDemo(); if(!demoArea) return;
-    const ns='http://www.w3.org/2000/svg';
-    const socket=document.createElementNS(ns,'ellipse'); socket.setAttribute('cx','180'); socket.setAttribute('cy','110'); socket.setAttribute('rx','24'); socket.setAttribute('ry','18'); socket.setAttribute('fill','rgba(167,139,250,.35)');
-    const ball=document.createElementNS(ns,'circle'); ball.setAttribute('cx','180'); ball.setAttribute('cy','110'); ball.setAttribute('r','12'); ball.setAttribute('fill','#a78bfa');
-    const limb=document.createElementNS(ns,'rect'); limb.setAttribute('x','180'); limb.setAttribute('y','104'); limb.setAttribute('width','140'); limb.setAttribute('height','12'); limb.setAttribute('rx','6'); limb.setAttribute('fill','#94a3b8');
+    clearDemo();
+    const socket = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    socket.setAttribute('cx','180'); socket.setAttribute('cy','110'); socket.setAttribute('rx','24'); socket.setAttribute('ry','18'); socket.setAttribute('fill','rgba(167,139,250,.35)');
+    const ball = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    ball.setAttribute('cx','180'); ball.setAttribute('cy','110'); ball.setAttribute('r','12'); ball.setAttribute('fill','#a78bfa');
+    const limb = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    limb.setAttribute('x','180'); limb.setAttribute('y','104'); limb.setAttribute('width','140'); limb.setAttribute('height','12'); limb.setAttribute('rx','6'); limb.setAttribute('fill','#94a3b8');
+    limb.setAttribute('id','ballLimb');
     demoArea.append(socket, ball, limb);
-    let a=0, r=32; (function tick(){ a+=0.035; const x=Math.cos(a)*r, y=Math.sin(a)*r; limb.setAttribute('transform',`translate(${x},${y}) rotate(${a*57.3},180,110)`); animId=requestAnimationFrame(tick); })();
-    if(jointNote) jointNote.textContent='Sendi Peluru: gerak ke segala arah (bahu/panggul).';
+    // gerak melingkar sederhana
+    let a=0, r=32; cancelAnimationFrame(animId);
+    function tick(){
+      a += 0.035; const x = Math.cos(a)*r, y = Math.sin(a)*r;
+      limb.setAttribute('transform',`translate(${x},${y}) rotate(${a*57.3},180,110)`);
+      animId = requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Peluru: gerak ke segala arah (bahu/panggul).';
   }
   function drawSaddle(){
-    clearDemo(); if(!demoArea) return;
-    const ns='http://www.w3.org/2000/svg';
-    const base=document.createElementNS(ns,'path'); base.setAttribute('d','M140,120 C160,95 200,145 220,120'); base.setAttribute('stroke','#22d3ee'); base.setAttribute('fill','none'); base.setAttribute('stroke-width','6');
-    const part=document.createElementNS(ns,'rect'); part.setAttribute('x','200'); part.setAttribute('y','96'); part.setAttribute('width','120'); part.setAttribute('height','16'); part.setAttribute('rx','8'); part.setAttribute('fill','#94a3b8');
+    clearDemo();
+    const base = document.createElementNS('http://www.w3.org/2000/svg','path');
+    base.setAttribute('d','M140,120 C160,95 200,145 220,120'); base.setAttribute('stroke','#22d3ee'); base.setAttribute('fill','none'); base.setAttribute('stroke-width','6');
+    const part = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    part.setAttribute('x','200'); part.setAttribute('y','96'); part.setAttribute('width','120'); part.setAttribute('height','16'); part.setAttribute('rx','8'); part.setAttribute('fill','#94a3b8');
+    part.setAttribute('id','saddlePart');
     demoArea.append(base, part);
-    let t=0; (function tick(){ t+=0.035; const tx=Math.sin(t)*26, ty=Math.cos(t)*12; part.setAttribute('transform',`translate(${tx},${ty})`); animId=requestAnimationFrame(tick); })();
-    if(jointNote) jointNote.textContent='Sendi Pelana: dua arah (ibu jari).';
+    // gerak dua arah sederhana
+    let t=0; cancelAnimationFrame(animId);
+    function tick(){
+      t+=0.035; const tx = Math.sin(t)*26; const ty = Math.cos(t)*12;
+      part.setAttribute('transform',`translate(${tx},${ty})`);
+      animId = requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Pelana: dua arah (ibu jari).';
   }
   function drawPivot(){
-    clearDemo(); if(!demoArea) return;
-    const ns='http://www.w3.org/2000/svg';
-    const axis=document.createElementNS(ns,'rect'); axis.setAttribute('x','200'); axis.setAttribute('y','70'); axis.setAttribute('width','10'); axis.setAttribute('height','90'); axis.setAttribute('rx','5'); axis.setAttribute('fill','#a78bfa');
-    const pointer=document.createElementNS(ns,'rect'); pointer.setAttribute('x','205'); pointer.setAttribute('y','115'); pointer.setAttribute('width','90'); pointer.setAttribute('height','8'); pointer.setAttribute('rx','4'); pointer.setAttribute('fill','#94a3b8');
+    clearDemo();
+    const axis = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    axis.setAttribute('x','200'); axis.setAttribute('y','70'); axis.setAttribute('width','10'); axis.setAttribute('height','90'); axis.setAttribute('rx','5'); axis.setAttribute('fill','#a78bfa');
+    const pointer = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    pointer.setAttribute('x','205'); pointer.setAttribute('y','115'); pointer.setAttribute('width','90'); pointer.setAttribute('height','8'); pointer.setAttribute('rx','4'); pointer.setAttribute('fill','#94a3b8');
     demoArea.append(axis, pointer);
-    let ang=0; (function tick(){ ang+=2.2; pointer.setAttribute('transform',`rotate(${ang},205,115)`); animId=requestAnimationFrame(tick); })();
-    if(jointNote) jointNote.textContent='Sendi Putar: memutar (leher atlas-axis).';
+    // rotasi kontinu
+    let ang = 0; cancelAnimationFrame(animId);
+    function tick(){
+      ang += 2.2; pointer.setAttribute('transform',`rotate(${ang},205,115)`);
+      animId = requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Putar: memutar (leher atlas-axis).';
   }
   function drawGliding(){
-    clearDemo(); if(!demoArea) return;
-    const ns='http://www.w3.org/2000/svg';
-    const surface=document.createElementNS(ns,'rect'); surface.setAttribute('x','120'); surface.setAttribute('y','120'); surface.setAttribute('width','200'); surface.setAttribute('height','12'); surface.setAttribute('rx','6'); surface.setAttribute('fill','rgba(34,211,238,.25)');
-    const block=document.createElementNS(ns,'rect'); block.setAttribute('x','140'); block.setAttribute('y','104'); block.setAttribute('width','60'); block.setAttribute('height','24'); block.setAttribute('rx','8'); block.setAttribute('fill','#94a3b8');
+    clearDemo();
+    const surface = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    surface.setAttribute('x','120'); surface.setAttribute('y','120'); surface.setAttribute('width','200'); surface.setAttribute('height','12'); surface.setAttribute('rx','6'); surface.setAttribute('fill','rgba(34,211,238,.25)');
+    const block = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    block.setAttribute('x','190'); block.setAttribute('y','104'); block.setAttribute('width','60'); block.setAttribute('height','24'); block.setAttribute('rx','8'); block.setAttribute('fill','#94a3b8');
+    block.setAttribute('id','glideBlock');
     demoArea.append(surface, block);
-    let x=140, dir=1; (function tick(){ if(x>240) dir=-1; if(x<120) dir=1; x+=dir*1.8; block.setAttribute('x',x); animId=requestAnimationFrame(tick); })();
-    if(jointNote) jointNote.textContent='Sendi Geser: menggeser (pergelangan).';
+    // gerak geser kiri-kanan
+    let x = 140, dir = 1; cancelAnimationFrame(animId);
+    function tick(){
+      if(x>240) dir=-1; if(x<120) dir=1; x += dir*1.8; block.setAttribute('x', x);
+      animId = requestAnimationFrame(tick);
+    }
+    tick();
+    jointNote.textContent = 'Sendi Geser: menggeser (pergelangan).';
   }
-  $('#jointSelect')?.addEventListener('change', e=>{
+
+  $('#jointSelect').addEventListener('change', e=>{
     const v = e.target.value;
     if(v==='engsel') drawHinge();
     else if(v==='peluru') drawBall();
     else if(v==='pelana') drawSaddle();
     else if(v==='putar') drawPivot();
     else if(v==='geser') drawGliding();
-    else { clearDemo(); if(jointNote) jointNote.textContent='Belum dipilih.'; }
+    else { clearDemo(); jointNote.textContent = 'Belum dipilih.'; }
   });
 
-  // Saraf
-  const sarafScene = $('#sarafScene'); const refleksNote = $('#refleksNote');
+  // Saraf: simulasi refleks sederhana
+  const sarafScene = document.getElementById('sarafScene');
+  const refleksNote = document.getElementById('refleksNote');
+  const btnRefleks = document.getElementById('btnRefleks');
+  const btnRefleksReset = document.getElementById('btnRefleksReset');
   function drawSarafBase(){
-    if(!sarafScene) return;
     sarafScene.innerHTML='';
-    const ns='http://www.w3.org/2000/svg';
-    const receptor=document.createElementNS(ns,'circle'); receptor.setAttribute('cx','60'); receptor.setAttribute('cy','110'); receptor.setAttribute('r','10'); receptor.setAttribute('fill','#22d3ee');
-    const cord=document.createElementNS(ns,'rect'); cord.setAttribute('x','180'); cord.setAttribute('y','60'); cord.setAttribute('width','60'); cord.setAttribute('height','100'); cord.setAttribute('rx','8'); cord.setAttribute('fill','rgba(167,139,250,.25)'); cord.setAttribute('stroke','#a78bfa');
-    const efektor=document.createElementNS(ns,'rect'); efektor.setAttribute('x','330'); efektor.setAttribute('y','95'); efektor.setAttribute('width','60'); efektor.setAttribute('height','30'); efektor.setAttribute('rx','8'); efektor.setAttribute('fill','#94a3b8');
-    const label=(x,y,txt)=>{ const t=document.createElementNS(ns,'text'); t.setAttribute('x',x); t.setAttribute('y',y); t.setAttribute('fill','#e2e8f0'); t.setAttribute('font-size','10'); t.textContent=txt; return t; };
+    // Reseptor (kulit), sumsum, efektor (otot)
+    const receptor = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    receptor.setAttribute('cx','60'); receptor.setAttribute('cy','110'); receptor.setAttribute('r','10'); receptor.setAttribute('fill','#22d3ee');
+    const cord = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    cord.setAttribute('x','180'); cord.setAttribute('y','60'); cord.setAttribute('width','60'); cord.setAttribute('height','100'); cord.setAttribute('rx','8'); cord.setAttribute('fill','rgba(167,139,250,.25)'); cord.setAttribute('stroke','#a78bfa');
+    const efektor = document.createElementNS('http://www.w3.org/2000/svg','rect');
+    efektor.setAttribute('x','330'); efektor.setAttribute('y','95'); efektor.setAttribute('width','60'); efektor.setAttribute('height','30'); efektor.setAttribute('rx','8'); efektor.setAttribute('fill','#94a3b8');
+    // Teks label kecil
+    function label(x,y,txt){
+      const t = document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x',x); t.setAttribute('y',y); t.setAttribute('fill','#e2e8f0'); t.setAttribute('font-size','10'); t.textContent = txt; return t;
+    }
     sarafScene.append(receptor, cord, efektor, label(40,132,'Reseptor'), label(182,56,'Sumsum'), label(330,92,'Efektor'));
   }
   function runRefleks(){
-    drawSarafBase(); if(refleksNote) refleksNote.textContent='Sinyal berjalan...';
-    if(!sarafScene) return;
-    const ns='http://www.w3.org/2000/svg';
-    const dot=document.createElementNS(ns,'circle'); dot.setAttribute('cx','60'); dot.setAttribute('cy','110'); dot.setAttribute('r','5'); dot.setAttribute('fill','#10b981');
+    drawSarafBase(); refleksNote.textContent = 'Sinyal berjalan...';
+    // titik sinyal
+    const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    dot.setAttribute('cx','60'); dot.setAttribute('cy','110'); dot.setAttribute('r','5'); dot.setAttribute('fill','#10b981');
     sarafScene.append(dot);
-    let t=0, phase=0;
-    (function tick(){
-      t+=2.2;
+    let t = 0; let phase = 0; // 0: ke sumsum, 1: ke efektor
+    function tick(){
+      t += 2.2;
       if(phase===0){
-        const x=Math.min(60+t,210); dot.setAttribute('cx',x);
+        // jalur sensorik: 60,110 -> 210,110
+        const x = Math.min(60 + t, 210); dot.setAttribute('cx', x);
         if(x>=210){ phase=1; t=0; }
-      }else{
-        const x=Math.min(210+t,360); dot.setAttribute('cx',x);
-        if(x>=360){ if(refleksNote) refleksNote.textContent='Respon: otot bergerak!'; return; }
+      } else if(phase===1){
+        // jalur motorik: 210,110 -> 360,110
+        const x = Math.min(210 + t, 360); dot.setAttribute('cx', x);
+        if(x>=360){ refleksNote.textContent = 'Respon: otot bergerak!'; return; }
       }
       requestAnimationFrame(tick);
-    })();
+    }
+    tick();
   }
-  $('#btnRefleks')?.addEventListener('click', e=>{ e.preventDefault(); runRefleks(); });
-  $('#btnRefleksReset')?.addEventListener('click', e=>{ e.preventDefault(); drawSarafBase(); if(refleksNote) refleksNote.textContent='Reseptor menerima rangsang → impuls ke sumsum → perintah ke efektor.'; });
+  btnRefleks?.addEventListener('click', e=>{ e.preventDefault(); runRefleks(); });
+  btnRefleksReset?.addEventListener('click', e=>{ e.preventDefault(); drawSarafBase(); refleksNote.textContent='Siap.'; });
   drawSarafBase();
 
-  // Reproduksi slider
-  const reproScene = $('#reproScene'); const stageRange = $('#stageRange'); const stageLabel = $('#stageLabel'); const reproNote = $('#reproNote');
+  // Reproduksi: simulasi slider 4 tahap
+  const scene = document.getElementById('reproScene');
+  const stageRange = document.getElementById('stageRange');
+  const stageLabel = document.getElementById('stageLabel');
+  const reproNote = document.getElementById('reproNote');
   function drawStage(stage){
-    if(!reproScene) return;
-    reproScene.innerHTML='';
-    const ns='http://www.w3.org/2000/svg';
-    const ovum=document.createElementNS(ns,'circle'); ovum.setAttribute('cx','310'); ovum.setAttribute('cy','110'); ovum.setAttribute('r','26'); ovum.setAttribute('fill','rgba(236,72,153,.35)'); ovum.setAttribute('stroke','#f472b6');
-    const cell=document.createElementNS(ns,'circle'); cell.setAttribute('cx', String(60+stage*70)); cell.setAttribute('cy','110'); cell.setAttribute('r','10'); cell.setAttribute('fill','#22d3ee');
-    const tail=document.createElementNS(ns,'path'); tail.setAttribute('d',`M ${60+stage*70-10},110 q -12 ${stage%2?'-6':'6'} -24 0`); tail.setAttribute('stroke','#22d3ee'); tail.setAttribute('fill','none'); tail.setAttribute('opacity','.7');
-    reproScene.append(ovum, cell, tail);
-    if(stage>=2){ const contact=document.createElementNS(ns,'line'); contact.setAttribute('x1','284'); contact.setAttribute('y1','110'); contact.setAttribute('x2', String(70+stage*70)); contact.setAttribute('y2','110'); contact.setAttribute('stroke','#a78bfa'); contact.setAttribute('stroke-dasharray','4 4'); reproScene.append(contact); }
-    if(stage===3){ const ring=document.createElementNS(ns,'circle'); ring.setAttribute('cx','310'); ring.setAttribute('cy','110'); ring.setAttribute('r','34'); ring.setAttribute('fill','none'); ring.setAttribute('stroke','rgba(34,197,94,.9)'); reproScene.append(ring); }
-    const labels=['Tahap 1','Tahap 2','Tahap 3','Tahap 4']; const notes=['Tahap 1: Sel terpisah.','Tahap 2: Sel mendekat.','Tahap 3: Kontak awal.','Tahap 4: Bergabung (ilustrasi).'];
-    if(stageLabel) stageLabel.textContent=labels[stage]; if(reproNote) reproNote.textContent=notes[stage];
-  }
-  if(stageRange){ drawStage(0); stageRange.addEventListener('input', ()=> drawStage(Number(stageRange.value))); }
+    scene.innerHTML = '';
+    // elemen umum: "ovum" sebagai lingkaran besar di kanan, "sel A" kecil bergerak dari kiri
+    const ovum = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    ovum.setAttribute('cx','310'); ovum.setAttribute('cy','110'); ovum.setAttribute('r','26'); ovum.setAttribute('fill','rgba(236,72,153,.35)'); ovum.setAttribute('stroke','#f472b6');
+    const cell = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    cell.setAttribute('cx', String(60 + stage*70)); cell.setAttribute('cy','110'); cell.setAttribute('r','10'); cell.setAttribute('fill','#22d3ee');
+    // ekor sederhana
+    const tail = document.createElementNS('http://www.w3.org/2000/svg','path');
+    tail.setAttribute('d', `M ${60 + stage*70 - 10},110 q -12 ${stage%2?'-6':'6'} -24 0`);
+    tail.setAttribute('stroke','#22d3ee'); tail.setAttribute('fill','none'); tail.setAttribute('opacity','.7');
 
-  // Peredaran Darah
-  const bloodScene = $('#bloodScene'); const bloodNote = $('#bloodNote'); const bloodStart = $('#bloodStart'); const bloodResetBtn = $('#bloodReset');
-  let bloodAnimId = null;
-  function drawBloodBase(){
-    if(!bloodScene) return;
-    bloodScene.innerHTML='';
-    const ns='http://www.w3.org/2000/svg';
-    // Jantung (pusat)
-    const heart = document.createElementNS(ns,'path');
-    heart.setAttribute('d','M210,120 L195,105 Q190,95 200,90 Q210,85 210,95 Q210,85 220,90 Q230,95 225,105 Z');
-    heart.setAttribute('fill','#ef4444'); heart.setAttribute('stroke','#dc2626'); heart.setAttribute('stroke-width','2');
-    bloodScene.append(heart);
-    const htxt = document.createElementNS(ns,'text'); htxt.setAttribute('x','210'); htxt.setAttribute('y','140'); htxt.setAttribute('fill','#e2e8f0'); htxt.setAttribute('font-size','10'); htxt.setAttribute('text-anchor','middle'); htxt.textContent='Jantung'; bloodScene.append(htxt);
-    
-    // Paru-paru kiri (peredaran kecil)
-    const lungL = document.createElementNS(ns,'ellipse'); lungL.setAttribute('cx','90'); lungL.setAttribute('cy','80'); lungL.setAttribute('rx','35'); lungL.setAttribute('ry','45'); lungL.setAttribute('fill','rgba(34,211,238,.25)'); lungL.setAttribute('stroke','#22d3ee'); bloodScene.append(lungL);
-    const ltxt = document.createElementNS(ns,'text'); ltxt.setAttribute('x','90'); ltxt.setAttribute('y','85'); ltxt.setAttribute('fill','#e2e8f0'); ltxt.setAttribute('font-size','10'); ltxt.setAttribute('text-anchor','middle'); ltxt.textContent='Paru-paru'; bloodScene.append(ltxt);
-    
-    // Tubuh/organ (peredaran besar) - kanan
-    const body = document.createElementNS(ns,'rect'); body.setAttribute('x','300'); body.setAttribute('y','60'); body.setAttribute('width','70'); body.setAttribute('height','100'); body.setAttribute('rx','12'); body.setAttribute('fill','rgba(167,139,250,.25)'); body.setAttribute('stroke','#a78bfa'); bloodScene.append(body);
-    const btxt = document.createElementNS(ns,'text'); btxt.setAttribute('x','335'); btxt.setAttribute('y','115'); btxt.setAttribute('fill','#e2e8f0'); btxt.setAttribute('font-size','10'); btxt.setAttribute('text-anchor','middle'); btxt.textContent='Seluruh Tubuh'; bloodScene.append(btxt);
-    
-    // Jalur arteri/vena (garis tipis sebagai panduan)
-    // Peredaran kecil: Jantung -> Paru -> Jantung
-    const pathPulm1 = document.createElementNS(ns,'path'); pathPulm1.setAttribute('d','M195,110 Q140,90 125,80'); pathPulm1.setAttribute('stroke','#22d3ee'); pathPulm1.setAttribute('stroke-width','2'); pathPulm1.setAttribute('fill','none'); pathPulm1.setAttribute('opacity','0.4'); pathPulm1.setAttribute('stroke-dasharray','4 2'); bloodScene.append(pathPulm1);
-    const pathPulm2 = document.createElementNS(ns,'path'); pathPulm2.setAttribute('d','M90,50 Q140,40 195,95'); pathPulm2.setAttribute('stroke','#22d3ee'); pathPulm2.setAttribute('stroke-width','2'); pathPulm2.setAttribute('fill','none'); pathPulm2.setAttribute('opacity','0.4'); pathPulm2.setAttribute('stroke-dasharray','4 2'); bloodScene.append(pathPulm2);
-    
-    // Peredaran besar: Jantung -> Tubuh -> Jantung
-    const pathSyst1 = document.createElementNS(ns,'path'); pathSyst1.setAttribute('d','M225,105 Q270,90 300,100'); pathSyst1.setAttribute('stroke','#a78bfa'); pathSyst1.setAttribute('stroke-width','2'); pathSyst1.setAttribute('fill','none'); pathSyst1.setAttribute('opacity','0.4'); pathSyst1.setAttribute('stroke-dasharray','4 2'); bloodScene.append(pathSyst1);
-    const pathSyst2 = document.createElementNS(ns,'path'); pathSyst2.setAttribute('d','M335,160 Q270,170 225,125'); pathSyst2.setAttribute('stroke','#a78bfa'); pathSyst2.setAttribute('stroke-width','2'); pathSyst2.setAttribute('fill','none'); pathSyst2.setAttribute('opacity','0.4'); pathSyst2.setAttribute('stroke-dasharray','4 2'); bloodScene.append(pathSyst2);
-  }
-  function runBloodCirculation(){
-    drawBloodBase(); if(bloodNote) bloodNote.textContent = 'Darah mengalir...';
-    if(!bloodScene) return;
-    const ns='http://www.w3.org/2000/svg';
-    
-    // Buat 2 sel darah: merah (peredaran kecil) dan biru (peredaran besar)
-    const cellRed = document.createElementNS(ns,'circle'); cellRed.setAttribute('r','6'); cellRed.setAttribute('fill','#ef4444'); cellRed.setAttribute('id','cellRed');
-    const cellBlue = document.createElementNS(ns,'circle'); cellBlue.setAttribute('r','6'); cellBlue.setAttribute('fill','#3b82f6'); cellBlue.setAttribute('id','cellBlue');
-    bloodScene.append(cellRed, cellBlue);
-    
-    let t = 0; const speed = 0.015;
-    (function tick(){
-      t += speed;
-      const progress = t % 1;
-      
-      // Sel merah: peredaran kecil (Jantung -> Paru -> Jantung)
-      // Fase 0-0.5: Jantung ke paru
-      // Fase 0.5-1: Paru ke jantung
-      let redX, redY;
-      if(progress < 0.5){
-        const p = progress * 2;
-        redX = 195 + (125-195)*p + Math.sin(p*Math.PI)*(-20);
-        redY = 110 + (80-110)*p;
-      } else {
-        const p = (progress-0.5) * 2;
-        redX = 90 + (195-90)*p + Math.sin(p*Math.PI)*20;
-        redY = 50 + (95-50)*p;
-      }
-      cellRed.setAttribute('cx', redX); cellRed.setAttribute('cy', redY);
-      
-      // Sel biru: peredaran besar (Jantung -> Tubuh -> Jantung)
-      // Fase 0-0.5: Jantung ke tubuh
-      // Fase 0.5-1: Tubuh ke jantung
-      let blueX, blueY;
-      if(progress < 0.5){
-        const p = progress * 2;
-        blueX = 225 + (300-225)*p;
-        blueY = 105 + (100-105)*p + Math.sin(p*Math.PI)*(-10);
-      } else {
-        const p = (progress-0.5) * 2;
-        blueX = 335 + (225-335)*p;
-        blueY = 160 + (125-160)*p + Math.sin(p*Math.PI)*10;
-      }
-      cellBlue.setAttribute('cx', blueX); cellBlue.setAttribute('cy', blueY);
-      
-      bloodAnimId = requestAnimationFrame(tick);
-    })();
-    if(bloodNote) bloodNote.textContent = 'Merah: peredaran kecil (paru). Biru: peredaran besar (tubuh).';
-  }
-  function resetBlood(){ if(bloodAnimId) cancelAnimationFrame(bloodAnimId); bloodAnimId=null; drawBloodBase(); if(bloodNote) bloodNote.textContent='Klik Mulai untuk melihat aliran.'; }
-  window.resetBlood = resetBlood;
-  bloodStart?.addEventListener('click', e=>{ e.preventDefault(); if(bloodAnimId) cancelAnimationFrame(bloodAnimId); runBloodCirculation(); });
-  bloodResetBtn?.addEventListener('click', e=>{ e.preventDefault(); resetBlood(); });
-  if(bloodScene){ drawBloodBase(); }
+    scene.append(ovum, cell, tail);
 
-  // Pencernaan
-  const digScene = $('#digScene'); const digNote = $('#digNote'); const digStart = $('#digStart'); const digStep = $('#digStep'); const digResetBtn = $('#digReset');
-  let digAnimId=null, digStage=0, digProgress=0, digAuto=false;
-  const digStages=[{name:'Mulut',x:40,y:60,w:60,h:30,color:'#38bdf8'},{name:'Kerongkongan',x:120,y:40,w:40,h:70,color:'#22d3ee'},{name:'Lambung',x:180,y:60,w:70,h:50,color:'#a78bfa'},{name:'Usus Halus',x:270,y:40,w:100,h:70,color:'#10b981'},{name:'Usus Besar',x:270,y:130,w:100,h:30,color:'#f59e0b'}];
-  function drawDigestBase(){
-    if(!digScene) return;
-    digScene.innerHTML='';
-    const ns='http://www.w3.org/2000/svg';
-    digStages.forEach((s,idx)=>{
-      const r=document.createElementNS(ns,'rect'); r.setAttribute('x',s.x); r.setAttribute('y',s.y); r.setAttribute('width',s.w); r.setAttribute('height',s.h); r.setAttribute('rx','10'); r.setAttribute('fill',s.color); r.setAttribute('opacity', idx===digStage ? '0.9' : '0.4'); digScene.append(r);
-      const t=document.createElementNS(ns,'text'); t.setAttribute('x',s.x+4); t.setAttribute('y',s.y-4); t.setAttribute('fill','#e2e8f0'); t.setAttribute('font-size','10'); t.textContent=s.name; digScene.append(t);
-    });
-    const bile=document.createElementNS(ns,'rect'); bile.setAttribute('x','250'); bile.setAttribute('y','30'); bile.setAttribute('width','8'); bile.setAttribute('height','20'); bile.setAttribute('fill','rgba(16,185,129,.6)');
-    const panc=document.createElementNS(ns,'rect'); panc.setAttribute('x','250'); panc.setAttribute('y','70'); panc.setAttribute('width','8'); panc.setAttribute('height','20'); panc.setAttribute('fill','rgba(59,130,246,.6)');
-    digScene.append(bile, panc);
+    if(stage>=2){
+      // kontak: garis kecil menyentuh ovum
+      const contact = document.createElementNS('http://www.w3.org/2000/svg','line');
+      contact.setAttribute('x1', String(310-26)); contact.setAttribute('y1','110');
+      contact.setAttribute('x2', String(60 + stage*70 + 10)); contact.setAttribute('y2','110');
+      contact.setAttribute('stroke','#a78bfa'); contact.setAttribute('stroke-dasharray','4 4');
+      scene.append(contact);
+    }
+
+    if(stage===3){
+      // tahap bergabung ilustratif: cincin
+      const ring = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      ring.setAttribute('cx','310'); ring.setAttribute('cy','110'); ring.setAttribute('r','34'); ring.setAttribute('fill','none'); ring.setAttribute('stroke','rgba(34,197,94,.9)');
+      scene.append(ring);
+    }
+
+    const labels = ['Tahap 1','Tahap 2','Tahap 3','Tahap 4'];
+    const notes = [
+      'Tahap 1: Sel terpisah.',
+      'Tahap 2: Sel mendekat.',
+      'Tahap 3: Kontak awal.',
+      'Tahap 4: Bergabung (ilustrasi).'
+    ];
+    stageLabel.textContent = labels[stage];
+    reproNote.textContent = notes[stage];
   }
-  function bolusPos(){ const s=digStages[digStage]; if(!s) return {cx: digStages.at(-1).x+digStages.at(-1).w-10, cy: digStages.at(-1).y+digStages.at(-1).h/2}; let cx=s.x+10, cy=s.y+s.h/2;
-    if(digStage===0){ cx=s.x+10+digProgress*(s.w-20); }
-    else if(digStage===1){ cy=s.y+10+digProgress*(s.h-20); }
-    else if(digStage===2){ cx=s.x+10+digProgress*(s.w-20); cy=s.y+s.h/2+Math.sin(digProgress*Math.PI)*6; }
-    else if(digStage===3){ cx=s.x+10+digProgress*(s.w-20); cy=s.y+s.h/2+Math.sin(digProgress*3*Math.PI)*4; }
-    else if(digStage===4){ cx=s.x+10+digProgress*(s.w-20); }
-    return {cx,cy};
+  if(stageRange){
+    drawStage(0);
+    stageRange.addEventListener('input', ()=> drawStage(Number(stageRange.value)) );
   }
-  function drawBolus(){
-    if(!digScene) return;
-    const {cx,cy}=bolusPos(); digScene.querySelector('#bolus')?.remove();
-    const ns='http://www.w3.org/2000/svg'; const c=document.createElementNS(ns,'circle'); c.setAttribute('id','bolus'); c.setAttribute('cx',cx); c.setAttribute('cy',cy); c.setAttribute('r','7'); c.setAttribute('fill','#f43f5e'); digScene.append(c);
-  }
-  function updateDigNote(){ if(!digNote) return; const name=digStages[Math.min(digStage,digStages.length-1)]?.name||'Selesai'; digNote.textContent = digStage<digStages.length ? `Posisi: ${name}` : 'Selesai: sisa menuju ekskresi.'; }
-  function resetDigest(){ digStage=0; digProgress=0; digAuto=false; if(digAnimId) cancelAnimationFrame(digAnimId); drawDigestBase(); drawBolus(); updateDigNote(); }
-  function stepDigest(){ if(digStage>=digStages.length){ updateDigNote(); return; } digProgress+=0.02; if(digProgress>=1){ digProgress=0; digStage++; drawDigestBase(); } drawBolus(); updateDigNote(); if(digAuto){ digAnimId=requestAnimationFrame(stepDigest); } }
-  window.resetDigest = resetDigest; // untuk reset
-  digStart?.addEventListener('click', e=>{ e.preventDefault(); if(digAnimId) cancelAnimationFrame(digAnimId); digAuto=true; stepDigest(); });
-  digStep?.addEventListener('click', e=>{ e.preventDefault(); digAuto=false; stepDigest(); });
-  digResetBtn?.addEventListener('click', e=>{ e.preventDefault(); resetDigest(); });
-  if(digScene){ resetDigest(); }
 
   // Pola Sehat
-  const habitForm = $('#habitForm'); const habitBar = $('#habitBar'); const habitMsg = $('#habitMsg');
-  function updateHabitProgress(){ if(!habitForm) return; const all=$$('input[name="habit"]',habitForm).length; const done=$$('input[name="habit"]:checked',habitForm).length; const pct=Math.round((done/all)*100); if(habitBar) habitBar.style.width=pct+'%'; if(habitMsg) habitMsg.textContent=`Progres: ${done}/${all}`; }
-  function resetHabits(){ if(!habitForm) return; $$('input[name="habit"]',habitForm).forEach(i=> i.checked=false); updateHabitProgress(); }
-  window.resetHabits = resetHabits;
+  const habitForm = $('#habitForm');
+  const habitBar = $('#habitBar'); const habitMsg = $('#habitMsg');
+  function updateHabitProgress(){
+    const all = $$('input[name="habit"]', habitForm).length;
+    const done = $$('input[name="habit"]:checked', habitForm).length;
+    const pct = Math.round((done/all)*100);
+    habitBar.style.width = pct+'%';
+    habitMsg.textContent = `Progres: ${done}/${all}`;
+  }
   habitForm?.addEventListener('change', updateHabitProgress);
-  $('#saveHabit')?.addEventListener('click', e=>{ e.preventDefault(); updateHabitProgress(); if(habitMsg) habitMsg.textContent += ' • Disimpan sementara.'; });
+  $('#saveHabit')?.addEventListener('click', e=>{ e.preventDefault(); updateHabitProgress(); habitMsg.textContent += ' • Disimpan sementara.'; });
+  function resetHabits(){ $$('input[name="habit"]', habitForm).forEach(i=> i.checked=false); updateHabitProgress(); }
   $('#resetHabit')?.addEventListener('click', e=>{ e.preventDefault(); resetHabits(); });
   updateHabitProgress();
 
   // Air minum
-  let water=0; const waterCountEl = $('#waterCount'); const waterBarEl = $('#waterBar');
-  function renderWater(){ if(waterCountEl) waterCountEl.textContent=water; const pct=Math.min(100,Math.round(water/8*100)); if(waterBarEl) waterBarEl.style.width=pct+'%'; const note=$('#waterNote'); if(note) note.textContent = water<6 ? 'Ayo minum lagi hingga minimal 6 gelas.' : 'Bagus! Pertahankan seimbang.'; }
+  let water=0; const waterCountEl = $('#waterCount'); const waterBar = $('#waterBar');
+  function renderWater(){
+    waterCountEl.textContent = water;
+    const pct = Math.min(100, Math.round(water/8*100));
+    waterBar.style.width = pct + '%';
+    $('#waterNote').textContent = water<6 ? 'Ayo minum lagi hingga minimal 6 gelas.' : 'Bagus! Pertahankan seimbang.';
+  }
   function resetWater(){ water=0; renderWater(); }
-  window.resetWater = resetWater;
-  $('#waterPlus')?.addEventListener('click', e=>{ e.preventDefault(); water=Math.min(12,water+1); renderWater(); });
-  $('#waterMinus')?.addEventListener('click', e=>{ e.preventDefault(); water=Math.max(0,water-1); renderWater(); });
+  $('#waterPlus').addEventListener('click', e=>{ e.preventDefault(); water = Math.min(12, water+1); renderWater(); });
+  $('#waterMinus').addEventListener('click', e=>{ e.preventDefault(); water = Math.max(0, water-1); renderWater(); });
   renderWater();
 
-  // Kuis
+  // Kuis (ringkas)
   const questions = [
+    // Rangka (3)
     { id:1, cat:'Rangka', q:'Tengkorak termasuk rangka...', opts:['Apendikular','Aksial'], a:1, exp:'Tengkorak melindungi otak, bagian rangka aksial.' },
     { id:2, cat:'Rangka', q:'Tulang belakang berfungsi terutama untuk...', opts:['Menyimpan darah','Menopang dan melindungi saraf tulang belakang'], a:1, exp:'Vertebra menyokong tubuh dan melindungi sumsum tulang belakang.' },
     { id:3, cat:'Rangka', q:'Dada dan rusuk melindungi...', opts:['Paru-paru dan jantung','Hati dan ginjal'], a:0, exp:'Rangka dada (sternum dan rusuk) melindungi jantung dan paru-paru.' },
+    // Otot (3)
     { id:4, cat:'Otot', q:'Saat fleksi lengan, yang berkontraksi adalah...', opts:['Bisep','Trisep'], a:0, exp:'Bisep kontraksi saat menekuk; trisep relaksasi.' },
     { id:5, cat:'Otot', q:'Otot lurik bekerja...', opts:['Tak sadar','Di bawah kesadaran'], a:1, exp:'Otot lurik (rangka) digerakkan secara sadar.' },
     { id:6, cat:'Otot', q:'Otot jantung ditemukan di...', opts:['Seluruh tubuh','Hanya di jantung'], a:1, exp:'Otot jantung hanya ada di jantung dan bekerja tak sadar.' },
+    // Sendi (3)
     { id:7, cat:'Sendi', q:'Sendi engsel bergerak...', opts:['Satu arah','Segala arah'], a:0, exp:'Sendi engsel seperti siku/lutut bergerak satu bidang.' },
     { id:8, cat:'Sendi', q:'Sendi peluru memungkinkan gerak...', opts:['Ke segala arah','Hanya maju mundur'], a:0, exp:'Sendi peluru (bahu/panggul) multi-arah.' },
     { id:9, cat:'Sendi', q:'Sendi putar contohnya di...', opts:['Leher (atlas-axis)','Pergelangan kaki'], a:0, exp:'Sendi putar antara atlas dan axis pada leher.' },
+    // Pola Sehat (3)
     { id:10, cat:'Pola Sehat', q:'Target air minum harian yang disarankan adalah...', opts:['1–2 gelas','6–8 gelas'], a:1, exp:'Umumnya dianjurkan 6–8 gelas/hari, sesuaikan kebutuhan.' },
     { id:11, cat:'Pola Sehat', q:'Olahraga teratur bermanfaat untuk...', opts:['Memperkuat otot dan tulang','Mengurangi jumlah tulang'], a:0, exp:'Aktivitas fisik memperkuat otot dan tulang serta kesehatan jantung.' },
     { id:12, cat:'Pola Sehat', q:'Istirahat cukup membantu...', opts:['Tubuh memperbaiki diri','Menghentikan metabolisme'], a:0, exp:'Tidur cukup mendukung pemulihan dan regulasi hormon.' },
+    // Reproduksi (3)
     { id:13, cat:'Reproduksi', q:'Organ utama reproduksi pria adalah...', opts:['Ovarium','Testis'], a:1, exp:'Testis menghasilkan sperma dan hormon testosteron.' },
     { id:14, cat:'Reproduksi', q:'Organ utama reproduksi wanita adalah...', opts:['Ovarium','Testis'], a:0, exp:'Ovarium menghasilkan ovum serta hormon estrogen/progesteron.' },
     { id:15, cat:'Reproduksi', q:'Pembuahan umumnya terjadi di...', opts:['Tuba falopi','Uterus'], a:0, exp:'Pertemuan sel umumnya terjadi di tuba falopi.' },
+    // Sistem Saraf (3)
     { id:16, cat:'Sistem Saraf', q:'Reseptor bertugas untuk...', opts:['Menerima rangsangan','Menghasilkan hormon'], a:0, exp:'Reseptor menerima rangsang lalu mengubahnya menjadi impuls saraf.' },
     { id:17, cat:'Sistem Saraf', q:'Efektor dapat berupa...', opts:['Otot dan kelenjar','Paru-paru dan jantung'], a:0, exp:'Efektor adalah otot (kontraksi/relaksasi) dan kelenjar (sekresi).' },
     { id:18, cat:'Sistem Saraf', q:'Refleks cepat terutama diproses di...', opts:['Sumsum tulang belakang','Ujung jari'], a:0, exp:'Lengkung refleks diproses cepat di sumsum tulang belakang.' },
-    { id:19, cat:'Pencernaan', q:'Di mana penyerapan zat gizi terjadi terutama?', opts:['Lambung','Usus halus'], a:1, exp:'Usus halus adalah tempat utama penyerapan zat gizi.' },
-    { id:20, cat:'Pencernaan', q:'Fungsi empedu dari hati adalah...', opts:['Memecah lemak','Mencerna protein'], a:0, exp:'Empedu membantu emulsi lemak agar mudah dicerna.' },
-    { id:21, cat:'Pencernaan', q:'Gerak mendorong bolus di kerongkongan disebut...', opts:['Peristaltik','Difusi'], a:0, exp:'Peristaltik adalah gerakan merambat yang mendorong makanan.' },
-    { id:22, cat:'Peredaran Darah', q:'Jantung manusia terdiri dari berapa ruang?', opts:['2 ruang','4 ruang'], a:1, exp:'Jantung punya 4 ruang: 2 atrium dan 2 ventrikel.' },
-    { id:23, cat:'Peredaran Darah', q:'Pembuluh darah yang membawa darah keluar dari jantung disebut...', opts:['Arteri','Vena'], a:0, exp:'Arteri membawa darah keluar jantung; vena membawa darah ke jantung.' },
-    { id:24, cat:'Peredaran Darah', q:'Peredaran darah kecil (pulmonal) menuju ke...', opts:['Paru-paru','Seluruh tubuh'], a:0, exp:'Peredaran kecil: jantung → paru-paru (ambil O₂) → jantung.' },
   ];
-  $('#totalQ')?.textContent = questions.length;
+  $('#totalQ').textContent = questions.length;
   const quizForm = $('#quizForm');
   function renderQuiz(){
-    if(!quizForm) return;
-    quizForm.innerHTML='';
+    quizForm.innerHTML = '';
     questions.forEach((it, idx)=>{
-      const wrap=document.createElement('div'); wrap.className='rounded-xl bg-white/5 border border-white/10 p-4';
-      const title=document.createElement('p'); title.className='font-semibold mb-2'; title.textContent=`${idx+1}. [${it.cat}] ${it.q}`;
-      const group=document.createElement('div'); group.className='grid sm:grid-cols-2 gap-2';
-      it.opts.forEach((op,oi)=>{
-        const label=document.createElement('label'); label.className='flex gap-2 items-center rounded-lg bg-white/5 border border-white/10 p-2 cursor-pointer hover:bg-white/10';
-        const input=document.createElement('input'); input.type='radio'; input.name='q'+it.id; input.value=oi;
-        const span=document.createElement('span'); span.textContent=op;
+      const wrap = document.createElement('div');
+      wrap.className = 'rounded-xl bg-white/5 border border-white/10 p-4';
+      const title = document.createElement('p');
+      title.className = 'font-semibold mb-2'; title.textContent = `${idx+1}. ${it.q}`;
+      const group = document.createElement('div'); group.className = 'grid sm:grid-cols-2 gap-2';
+      it.opts.forEach((op, oi)=>{
+        const label = document.createElement('label');
+        label.className = 'flex gap-2 items-center rounded-lg bg-white/5 border border-white/10 p-2 cursor-pointer hover:bg-white/10';
+        const input = document.createElement('input'); input.type='radio'; input.name='q'+it.id; input.value=oi;
+        const span = document.createElement('span'); span.textContent = op;
         label.append(input, span); group.appendChild(label);
       });
-      const fb=document.createElement('div'); fb.id='fb'+it.id; fb.className='mt-2 text-sm';
+      const fb = document.createElement('div'); fb.id='fb'+it.id; fb.className='mt-2 text-sm';
       wrap.append(title, group, fb); quizForm.append(wrap);
     });
     updateQuizBar();
   }
-  function getAnswers(){ return questions.map(it=>{ const chosen=$('input[name="q'+it.id+'"]:checked'); return { id:it.id, chosen: chosen? Number(chosen.value): null }; }); }
-  function updateQuizBar(){ const answered=getAnswers().filter(a=> a.chosen!==null).length; $('#quizBar')?.style.setProperty('width', Math.round((answered/questions.length)*100)+'%'); }
-  quizForm?.addEventListener('change', updateQuizBar);
+  function getAnswers(){
+    return questions.map(it=>{
+      const chosen = $('input[name="q'+it.id+'"]:checked');
+      return { id: it.id, chosen: chosen? Number(chosen.value): null };
+    });
+  }
+  function updateQuizBar(){
+    const answered = getAnswers().filter(a=> a.chosen!==null).length;
+    $('#quizBar').style.width = Math.round((answered/questions.length)*100)+'%';
+  }
+  quizForm.addEventListener('change', updateQuizBar);
   function gradeQuiz(){
     let score=0;
     getAnswers().forEach(ans=>{
-      const q = questions.find(x=> x.id===ans.id); const fb = $('#fb'+ans.id);
-      if(!fb) return;
+      const q = questions.find(x=> x.id===ans.id);
+      const fb = $('#fb'+ans.id);
       if(ans.chosen===null){ fb.textContent='Belum dijawab.'; fb.className='mt-2 text-sm text-yellow-300'; }
       else if(ans.chosen===q.a){ fb.textContent='Benar!'; fb.className='mt-2 text-sm text-emerald-300'; score++; }
       else { fb.textContent='Kurang tepat.'; fb.className='mt-2 text-sm text-rose-300'; }
     });
-    $('#score')?.textContent = score;
+    $('#score').textContent = score;
   }
-  function explainQuiz(){ questions.forEach(q=>{ const fb=$('#fb'+q.id); if(fb && !fb.textContent.includes(q.exp)) fb.textContent += ' '+q.exp; }); }
-  function restartQuiz(){ renderQuiz(); $('#score')?.textContent = 0; $('#quizBar')?.style.setProperty('width','0%'); }
-  window.restartQuiz = restartQuiz;
-  $('#submitQuiz')?.addEventListener('click', e=>{ e.preventDefault(); gradeQuiz(); });
-  $('#showExplain')?.addEventListener('click', e=>{ e.preventDefault(); explainQuiz(); });
-  $('#restartQuiz')?.addEventListener('click', e=>{ e.preventDefault(); restartQuiz(); });
+  function explainQuiz(){
+    questions.forEach(q=>{
+      const fb = $('#fb'+q.id);
+      if(!fb.textContent.includes(q.exp)) fb.textContent += ' '+q.exp;
+    });
+  }
+  function restartQuiz(){
+    renderQuiz(); $('#score').textContent = 0; $('#quizBar').style.width='0%';
+  }
+  $('#submitQuiz').addEventListener('click', e=>{ e.preventDefault(); gradeQuiz(); });
+  $('#showExplain').addEventListener('click', e=>{ e.preventDefault(); explainQuiz(); });
+  $('#restartQuiz').addEventListener('click', e=>{ e.preventDefault(); restartQuiz(); });
   renderQuiz();
-}); // DOMContentLoaded end
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a782de111c0d846',t:'MTc2NDY1MDc3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a782549035fd846',t:'MTc2NDY1MDQyMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
